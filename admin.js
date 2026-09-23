@@ -733,17 +733,43 @@ boutonEnregistrerAdministrateur.addEventListener(
 
         boutonEnregistrerAdministrateur.disabled = true;
 
-        const { data, error } = await supabaseClient.functions.invoke(
-            "gerer-administrateur",
-            {
-                body: {
-                    action: "creer",
-                    nom: nom,
-                    email: email,
-                    mot_de_passe: motDePasse
-                }
-            }
-        );
+        const {
+    data: sessionData,
+    error: sessionError
+} = await supabaseClient.auth.getSession();
+
+if (
+    sessionError ||
+    !sessionData.session ||
+    !sessionData.session.access_token
+) {
+    boutonEnregistrerAdministrateur.disabled = false;
+
+    alert(
+        "Ta session administrateur n'est plus valide. " +
+        "Déconnecte-toi puis reconnecte-toi."
+    );
+
+    return;
+}
+
+const { data, error } = await supabaseClient.functions.invoke(
+    "gerer-administrateur",
+    {
+        body: {
+            action: "creer",
+            nom: nom,
+            email: email,
+            mot_de_passe: motDePasse
+        },
+
+        headers: {
+            Authorization:
+                "Bearer " +
+                sessionData.session.access_token
+        }
+    }
+);
 
         boutonEnregistrerAdministrateur.disabled = false;
 
