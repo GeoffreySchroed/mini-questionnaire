@@ -528,18 +528,29 @@ async function terminerQuestionnaire() {
 
     if (error) {
 
-        console.error(
-            "Erreur enregistrement :",
-            error.message
-        );
+    console.error(
+        "Erreur enregistrement :",
+        error.message
+    );
 
-
+    if (
+        error.message &&
+        error.message.includes(
+            "Un questionnaire a déjà été envoyé récemment"
+        )
+    ) {
         alert(
-            "Une erreur est survenue lors de l'enregistrement du questionnaire."
+            "Ce questionnaire a déjà été envoyé récemment avec ce moyen de contact. " +
+            "Merci de patienter quelques minutes avant de réessayer. 😊"
         );
+    } else {
+        alert(
+            "Une erreur est survenue lors de l'enregistrement du questionnaire. " +
+            "Merci de réessayer."
+        );
+    }
 
-
-        envoiEnCours = false;
+    envoiEnCours = false;
 
 
         boutonsReponse.forEach(
