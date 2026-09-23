@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Administration - Questionnaire</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="container container-admin">
+
+
+        <!-- CONNEXION -->
+
+        <div id="connexion-admin">
+
+            <h1>Administration</h1>
+
+            <p>
+                Connecte-toi pour gérer ton questionnaire.
+            </p>
+
+
+            <form id="formulaire-connexion">
+
+                <label for="email">
+                    Adresse e-mail
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    autocomplete="email"
+                    required
+                >
+
+
+                <label for="mot-de-passe">
+                    Mot de passe
+                </label>
+
+                <input
+                    type="password"
+                    id="mot-de-passe"
+                    autocomplete="current-password"
+                    required
+                >
+
+
+                <button type="submit">
+                    Se connecter
+                </button>
+
+            </form>
+
+        </div>
+
+
+
+        <!-- TABLEAU DE BORD -->
+
+        <div
+            id="tableau-de-bord"
+            class="cache"
+        >
+
+            <div class="entete-admin">
+
+                <div>
+
+                    <h1 id="bienvenue-admin">
+                        Bienvenue 👋
+                    </h1>
+
+                    <p id="role-admin">
+                        Rôle :
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="deconnexion"
+                    type="button"
+                >
+                    Se déconnecter
+                </button>
+
+            </div>
+
+
+
+            <!-- MON QUESTIONNAIRE -->
+
+            <div id="section-mon-questionnaire">
+
+                <h2>
+                    Mon questionnaire
+                </h2>
+
+                <p>
+                    Partage ce lien ou le QR code
+                    pour donner accès à ton questionnaire.
+                </p>
+
+
+                <label for="lien-questionnaire">
+                    Lien public
+                </label>
+
+
+                <div class="ligne-lien">
+
+                    <input
+                        type="text"
+                        id="lien-questionnaire"
+                        readonly
+                    >
+
+
+                    <button
+                        id="copier-lien-questionnaire"
+                        type="button"
+                    >
+                        Copier
+                    </button>
+
+                </div>
+
+
+                <div id="zone-qr">
+
+                    <div id="qr-code">
+                    </div>
+
+                    <p>
+                        Scanne ce QR code avec un téléphone
+                        pour ouvrir le questionnaire.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ADMINISTRATEURS -->
+
+            <div
+                id="section-administrateurs"
+                class="cache"
+            >
+
+                <h2>
+                    Administrateurs
+                </h2>
+
+                <p>
+                    Gère les administrateurs invités de l'application.
+                </p>
+
+
+                <div id="liste-administrateurs">
+
+                    <p>
+                        Aucun administrateur chargé.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="ajouter-administrateur"
+                    type="button"
+                >
+                    + Ajouter un administrateur
+                </button>
+
+
+                <div
+                    id="formulaire-administrateur"
+                    class="cache"
+                >
+
+                    <h3>
+                        Ajouter un administrateur
+                    </h3>
+
+
+                    <p class="info-admin">
+                        Crée d'abord le compte dans
+                        Supabase → Authentication → Users,
+                        puis copie ici son UUID.
+                    </p>
+
+
+                    <label for="admin-nom">
+                        Nom
+                    </label>
+
+                    <input
+                        type="text"
+                        id="admin-nom"
+                        placeholder="Nom de l'administrateur"
+                    >
+
+
+                    <label for="admin-uuid">
+                        UUID du compte Supabase
+                    </label>
+
+                    <input
+                        type="text"
+                        id="admin-uuid"
+                        placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                    >
+
+
+                    <div class="actions-formulaire">
+
+                        <button
+                            id="enregistrer-administrateur"
+                            type="button"
+                        >
+                            Enregistrer
+                        </button>
+
+
+                        <button
+                            id="annuler-administrateur"
+                            type="button"
+                            class="bouton-secondaire"
+                        >
+                            Annuler
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- QUESTIONS -->
+
+            <div id="section-questions">
+
+                <h2>Questions</h2>
+
+                <p>
+                    Gère les questions et les points attribués à chaque réponse.
+                </p>
+
+
+                <div id="liste-questions">
+
+                    <p>
+                        Aucune question chargée.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="ajouter-question"
+                    type="button"
+                >
+                    + Ajouter une question
+                </button>
+
+
+                <div
+                    id="formulaire-question"
+                    class="cache"
+                >
+
+                    <h2>
+                        Nouvelle question
+                    </h2>
+
+
+                    <label for="nouvelle-question">
+                        Question
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nouvelle-question"
+                        placeholder="Écris ta question..."
+                    >
+
+
+                    <h3>Points</h3>
+
+                    <p>
+                        Définis les points attribués à chaque réponse.
+                    </p>
+
+
+                    <div class="table-responsive">
+
+                        <table class="table-points">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Réponse</th>
+                                    <th>👥 Amis</th>
+                                    <th>🌙 Un soir</th>
+                                    <th>❤️ Couple</th>
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                <tr>
+                                    <td>Oui</td>
+                                    <td><input type="number" id="oui-amis" value="0"></td>
+                                    <td><input type="number" id="oui-un-soir" value="0"></td>
+                                    <td><input type="number" id="oui-couple" value="0"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Non</td>
+                                    <td><input type="number" id="non-amis" value="0"></td>
+                                    <td><input type="number" id="non-un-soir" value="0"></td>
+                                    <td><input type="number" id="non-couple" value="0"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Peut-être</td>
+                                    <td><input type="number" id="peut-etre-amis" value="0"></td>
+                                    <td><input type="number" id="peut-etre-un-soir" value="0"></td>
+                                    <td><input type="number" id="peut-etre-couple" value="0"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Pas du tout</td>
+                                    <td><input type="number" id="pas-du-tout-amis" value="0"></td>
+                                    <td><input type="number" id="pas-du-tout-un-soir" value="0"></td>
+                                    <td><input type="number" id="pas-du-tout-couple" value="0"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Je ne sais pas</td>
+                                    <td><input type="number" id="je-ne-sais-pas-amis" value="0"></td>
+                                    <td><input type="number" id="je-ne-sais-pas-un-soir" value="0"></td>
+                                    <td><input type="number" id="je-ne-sais-pas-couple" value="0"></td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <div class="actions-formulaire">
+
+                        <button
+                            id="enregistrer-question"
+                            type="button"
+                        >
+                            Enregistrer
+                        </button>
+
+                        <button
+                            id="annuler-question"
+                            type="button"
+                            class="bouton-secondaire"
+                        >
+                            Annuler
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RÉSULTATS -->
+
+            <div id="section-resultats">
+
+                <h2>Résultats</h2>
+
+                <p>
+                    Résultats des personnes ayant terminé le questionnaire.
+                </p>
+
+
+                <div id="filtres-categorie">
+
+                    <button id="classement-amis" type="button">
+                        👥 Amis
+                    </button>
+
+                    <button id="classement-un-soir" type="button">
+                        🌙 Un soir
+                    </button>
+
+                    <button id="classement-couple" type="button">
+                        ❤️ Couple
+                    </button>
+
+                </div>
+
+
+                <div id="filtres-nombre">
+
+                    <button id="afficher-top-5" type="button">
+                        Top 5
+                    </button>
+
+                    <button id="afficher-top-10" type="button">
+                        Top 10
+                    </button>
+
+                    <button id="afficher-tous" type="button">
+                        Tous
+                    </button>
+
+                </div>
+
+
+                <div id="liste-resultats">
+
+                    <p>
+                        Aucun résultat chargé.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div
+        id="fond-popup"
+        class="cache"
+    ></div>
+
+
+    <div
+        id="fiche-participant"
+        class="cache"
+    >
+
+        <button
+            id="croix-fermer-fiche"
+            type="button"
+            aria-label="Fermer"
+        >
+            ✕
+        </button>
+
+
+        <h2>
+            Détails du participant
+        </h2>
+
+
+        <div id="infos-participant">
+        </div>
+
+
+        <h3>Résultats</h3>
+
+        <div id="scores-participant">
+        </div>
+
+
+        <h3>Réponses</h3>
+
+        <div id="reponses-participant">
+        </div>
+
+
+        <button
+            id="fermer-fiche-participant"
+            type="button"
+        >
+            Fermer
+        </button>
+
+    </div>
+
+
+
+    <!-- Bibliothèque QR Code -->
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+
+    <!-- Supabase -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <script src="admin.js"></script>
+
+</body>
+
+</html>

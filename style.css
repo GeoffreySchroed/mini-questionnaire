@@ -1,0 +1,836 @@
+/* ====================================== */
+/* BASE                                   */
+/* ====================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    padding: 20px;
+
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    background: linear-gradient(
+        135deg,
+        #667eea 0%,
+        #9b6dcc 50%,
+        #e78ab0 100%
+    );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* ====================================== */
+/* CARTE PRINCIPALE                       */
+/* ====================================== */
+
+.container {
+    width: 100%;
+    max-width: 450px;
+
+    padding: 30px;
+
+    background: white;
+
+    border-radius: 15px;
+
+    text-align: center;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.15);
+}
+
+
+/* ====================================== */
+/* TEXTES                                 */
+/* ====================================== */
+
+h1 {
+    margin-top: 0;
+    color: #333;
+}
+
+
+h2,
+h3 {
+    color: #333;
+}
+
+
+p {
+    color: #666;
+    line-height: 1.5;
+}
+
+
+/* ====================================== */
+/* FORMULAIRES                            */
+/* ====================================== */
+
+form {
+    margin-top: 25px;
+    text-align: left;
+}
+
+
+label {
+    display: block;
+
+    margin-top: 15px;
+    margin-bottom: 6px;
+
+    color: #444;
+
+    font-weight: bold;
+}
+
+
+input {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid #ccc;
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+
+input:focus {
+    border-color: #7b68c8;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(123, 104, 200, 0.10);
+}
+
+
+/* ====================================== */
+/* BOUTONS                                */
+/* ====================================== */
+
+button {
+    width: 100%;
+
+    padding: 15px;
+    margin-top: 20px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #7b68c8;
+    color: white;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+button:hover {
+    background: #6957b5;
+}
+
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+.bouton-secondaire {
+    background: #eeeef4;
+    color: #555;
+}
+
+
+.bouton-secondaire:hover {
+    background: #dedee8;
+    color: #333;
+}
+
+
+.bouton-danger {
+    background: #d95c5c;
+}
+
+
+.bouton-danger:hover {
+    background: #c34848;
+}
+
+
+/* ====================================== */
+/* CACHÉ                                  */
+/* ====================================== */
+
+.cache {
+    display: none;
+}
+
+
+/* ====================================== */
+/* QUESTIONNAIRE PARTICIPANT              */
+/* ====================================== */
+
+#numero-question {
+    margin-bottom: 15px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    color: #7b68c8;
+}
+
+
+#texte-question {
+    font-size: 22px;
+    line-height: 1.4;
+}
+
+
+.reponses {
+    margin-top: 25px;
+}
+
+
+.reponse {
+    margin-top: 10px;
+}
+
+
+/* ====================================== */
+/* ADMINISTRATION                         */
+/* ====================================== */
+
+.container-admin {
+    max-width: 1000px;
+    text-align: left;
+}
+
+
+.entete-admin {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+
+.entete-admin h1 {
+    margin-bottom: 5px;
+}
+
+
+.entete-admin p {
+    margin: 0;
+}
+
+
+#deconnexion {
+    width: auto;
+
+    margin: 0;
+
+    padding: 12px 18px;
+}
+
+
+/* ====================================== */
+/* SECTIONS ADMIN                         */
+/* ====================================== */
+
+#section-mon-questionnaire,
+#section-administrateurs,
+#section-questions,
+#section-resultats {
+    margin-top: 30px;
+    padding: 25px;
+
+    background: #f8f8fb;
+
+    border: 1px solid #e5e5ee;
+    border-radius: 15px;
+}
+
+
+/* ====================================== */
+/* MON QUESTIONNAIRE                      */
+/* ====================================== */
+
+.ligne-lien {
+    display: flex;
+    align-items: stretch;
+
+    gap: 10px;
+}
+
+
+.ligne-lien input {
+    flex: 1;
+
+    min-width: 0;
+
+    background: white;
+}
+
+
+#copier-lien-questionnaire {
+    width: auto;
+
+    margin: 0;
+
+    padding-left: 22px;
+    padding-right: 22px;
+}
+
+
+#zone-qr {
+    margin-top: 25px;
+
+    padding: 20px;
+
+    background: white;
+
+    border: 1px solid #e5e5ee;
+    border-radius: 12px;
+
+    text-align: center;
+}
+
+
+#qr-code {
+    display: flex;
+    justify-content: center;
+
+    min-height: 180px;
+}
+
+
+#qr-code img,
+#qr-code canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* ====================================== */
+/* ADMINISTRATEURS                        */
+/* ====================================== */
+
+.bloc-administrateur {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    margin-top: 12px;
+    padding: 18px;
+
+    background: white;
+
+    border: 1px solid #e5e5ee;
+    border-radius: 12px;
+}
+
+
+.bloc-administrateur h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+
+.bloc-administrateur p {
+    margin: 0;
+}
+
+
+.actions-administrateur {
+    display: flex;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+
+.actions-administrateur button {
+    width: auto;
+
+    margin: 0;
+
+    padding: 10px 14px;
+
+    font-size: 14px;
+}
+
+
+#formulaire-administrateur {
+    margin-top: 20px;
+    padding: 20px;
+
+    background: white;
+
+    border: 1px solid #e5e5ee;
+    border-radius: 12px;
+}
+
+
+.info-admin {
+    padding: 12px;
+
+    background: #f2f0fa;
+
+    border-left: 4px solid #7b68c8;
+    border-radius: 6px;
+}
+
+
+/* ====================================== */
+/* QUESTIONS                              */
+/* ====================================== */
+
+.bloc-question {
+    margin-top: 15px;
+    padding: 18px;
+
+    background: white;
+
+    border: 1px solid #e5e5ee;
+    border-radius: 12px;
+}
+
+
+.actions-question {
+    display: flex;
+
+    gap: 10px;
+}
+
+
+.actions-question button {
+    flex: 1;
+
+    margin-top: 10px;
+}
+
+
+#formulaire-question {
+    margin-top: 20px;
+    padding: 20px;
+
+    background: white;
+
+    border: 1px solid #e5e5ee;
+    border-radius: 12px;
+}
+
+
+/* ====================================== */
+/* ACTIONS FORMULAIRES                    */
+/* ====================================== */
+
+.actions-formulaire {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+.actions-formulaire button {
+    flex: 1;
+
+    margin-top: 0;
+}
+
+
+/* ====================================== */
+/* TABLEAU POINTS                         */
+/* ====================================== */
+
+.table-responsive {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.table-points {
+    width: 100%;
+
+    margin-top: 15px;
+
+    border-collapse: collapse;
+}
+
+
+.table-points th,
+.table-points td {
+    padding: 10px;
+
+    text-align: center;
+
+    border-bottom: 1px solid #ddd;
+}
+
+
+.table-points input {
+    min-width: 70px;
+}
+
+
+/* ====================================== */
+/* FILTRES RÉSULTATS                      */
+/* ====================================== */
+
+#filtres-categorie,
+#filtres-nombre {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+
+#filtres-categorie button,
+#filtres-nombre button {
+    flex: 1;
+
+    margin-top: 0;
+
+    background: white;
+    color: #555;
+
+    border: 1px solid #d8d8e5;
+}
+
+
+#filtres-categorie button:hover,
+#filtres-nombre button:hover {
+    background: #f0eef9;
+    color: #7b68c8;
+}
+
+
+#filtres-categorie button.actif,
+#filtres-nombre button.actif {
+    background: #7b68c8;
+    color: white;
+
+    border-color: #7b68c8;
+
+    box-shadow:
+        0 3px 10px
+        rgba(123, 104, 200, 0.25);
+}
+
+
+/* ====================================== */
+/* RÉSULTATS                              */
+/* ====================================== */
+
+.bloc-resultat {
+    margin-top: 12px;
+    padding: 18px;
+
+    background: white;
+
+    border: 1px solid #e5e5ee;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.bloc-resultat:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 15px
+        rgba(0, 0, 0, 0.08);
+}
+
+
+.bouton-detail-participant {
+    margin-top: 10px;
+
+    padding: 10px 15px;
+
+    font-size: 14px;
+}
+
+
+/* ====================================== */
+/* FOND POPUP                             */
+/* ====================================== */
+
+#fond-popup {
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0, 0, 0, 0.55);
+
+    z-index: 999;
+}
+
+
+#fond-popup.cache {
+    display: none;
+}
+
+
+/* ====================================== */
+/* POPUP PARTICIPANT                      */
+/* ====================================== */
+
+#fiche-participant {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    width: calc(100% - 40px);
+    max-width: 650px;
+
+    max-height: 85vh;
+
+    overflow-y: auto;
+
+    padding: 30px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 15px 50px
+        rgba(0, 0, 0, 0.30);
+
+    z-index: 1000;
+}
+
+
+#fiche-participant.cache {
+    display: none;
+}
+
+
+#fiche-participant > h2 {
+    margin-top: 0;
+
+    padding-right: 50px;
+}
+
+
+#croix-fermer-fiche {
+    position: absolute;
+
+    top: 15px;
+    right: 15px;
+
+    width: 38px;
+    height: 38px;
+
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f1f1f5;
+    color: #555;
+
+    font-size: 18px;
+}
+
+
+#croix-fermer-fiche:hover {
+    background: #e3e1ed;
+    color: #7b68c8;
+}
+
+
+#infos-participant,
+#scores-participant {
+    padding: 15px;
+
+    background: #f8f8fb;
+
+    border-radius: 10px;
+}
+
+
+.bloc-reponse-participant {
+    margin-top: 12px;
+    padding: 15px;
+
+    background: white;
+
+    border-left: 4px solid #7b68c8;
+    border-radius: 8px;
+}
+
+
+#fermer-fiche-participant {
+    margin-top: 25px;
+}
+
+
+/* ====================================== */
+/* VERSION GSM                            */
+/* ====================================== */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 10px;
+
+        align-items: flex-start;
+    }
+
+
+    .container {
+        padding: 20px;
+    }
+
+
+    .container-admin {
+        padding: 18px;
+    }
+
+
+    .entete-admin {
+        display: block;
+    }
+
+
+    #deconnexion {
+        width: 100%;
+
+        margin-top: 15px;
+    }
+
+
+    #section-mon-questionnaire,
+    #section-administrateurs,
+    #section-questions,
+    #section-resultats {
+        padding: 15px;
+    }
+
+
+    .ligne-lien {
+        display: block;
+    }
+
+
+    #copier-lien-questionnaire {
+        width: 100%;
+
+        margin-top: 10px;
+    }
+
+
+    .bloc-administrateur {
+        display: block;
+    }
+
+
+    .actions-administrateur {
+        margin-top: 15px;
+    }
+
+
+    .actions-administrateur button {
+        flex: 1;
+    }
+
+
+    .actions-question,
+    .actions-formulaire {
+        display: block;
+    }
+
+
+    .actions-question button,
+    .actions-formulaire button {
+        width: 100%;
+
+        margin-top: 10px;
+    }
+
+
+    .table-points {
+        font-size: 13px;
+    }
+
+
+    .table-points th,
+    .table-points td {
+        padding: 5px;
+    }
+
+
+    .table-points input {
+        min-width: 55px;
+
+        padding: 8px;
+    }
+
+
+    #filtres-categorie,
+    #filtres-nombre {
+        gap: 6px;
+    }
+
+
+    #filtres-categorie button,
+    #filtres-nombre button {
+        padding: 11px 6px;
+
+        font-size: 14px;
+    }
+
+
+    #fiche-participant {
+        width: calc(100% - 20px);
+
+        max-height: 90vh;
+
+        padding: 20px;
+
+        border-radius: 15px;
+    }
+}

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Questionnaire</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="container">
+
+
+        <!-- ====================================== -->
+        <!-- LIEN INVALIDE                         -->
+        <!-- ====================================== -->
+
+        <div
+            id="lien-invalide"
+            class="cache"
+        >
+
+            <h1>Questionnaire indisponible</h1>
+
+            <p>
+                Ce lien de questionnaire n'est pas valide
+                ou n'est plus disponible.
+            </p>
+
+        </div>
+
+
+
+        <!-- ====================================== -->
+        <!-- ACCUEIL                                -->
+        <!-- ====================================== -->
+
+        <div
+            id="accueil"
+            class="cache"
+        >
+
+            <h1>
+                Bienvenue 👋
+            </h1>
+
+            <p>
+                Quelques questions pour apprendre
+                à mieux te connaître.
+            </p>
+
+            <button
+                id="commencer"
+                type="button"
+            >
+                Commencer
+            </button>
+
+        </div>
+
+
+
+        <!-- ====================================== -->
+        <!-- IDENTIFICATION                         -->
+        <!-- ====================================== -->
+
+        <div
+            id="identification"
+            class="cache"
+        >
+
+            <h1>
+                Faisons connaissance 😊
+            </h1>
+
+            <p>
+                Avant de commencer,
+                indique quelques informations.
+            </p>
+
+
+            <form id="formulaire-identification">
+
+                <label for="prenom">
+                    Prénom *
+                </label>
+
+                <input
+                    type="text"
+                    id="prenom"
+                    required
+                >
+
+
+                <label for="nom">
+                    Nom *
+                </label>
+
+                <input
+                    type="text"
+                    id="nom"
+                    required
+                >
+
+
+                <label for="age">
+                    Âge *
+                </label>
+
+                <input
+                    type="number"
+                    id="age"
+                    min="18"
+                    max="100"
+                    required
+                >
+
+
+                <label for="gsm">
+                    Numéro de GSM
+                </label>
+
+                <input
+                    type="tel"
+                    id="gsm"
+                    placeholder="Optionnel"
+                >
+
+
+                <label for="reseau">
+                    Réseau social
+                </label>
+
+                <input
+                    type="text"
+                    id="reseau"
+                    placeholder="Instagram, Facebook..."
+                >
+
+
+                <button type="submit">
+                    Continuer
+                </button>
+
+            </form>
+
+        </div>
+
+
+
+        <!-- ====================================== -->
+        <!-- QUESTIONNAIRE                          -->
+        <!-- ====================================== -->
+
+        <div
+            id="questionnaire"
+            class="cache"
+        >
+
+            <p id="numero-question">
+                Question
+            </p>
+
+
+            <h1 id="texte-question">
+                Question...
+            </h1>
+
+
+            <div class="reponses">
+
+                <button
+                    class="reponse"
+                    data-reponse="oui"
+                    type="button"
+                >
+                    Oui
+                </button>
+
+
+                <button
+                    class="reponse"
+                    data-reponse="non"
+                    type="button"
+                >
+                    Non
+                </button>
+
+
+                <button
+                    class="reponse"
+                    data-reponse="peut-etre"
+                    type="button"
+                >
+                    Peut-être
+                </button>
+
+
+                <button
+                    class="reponse"
+                    data-reponse="pas-du-tout"
+                    type="button"
+                >
+                    Pas du tout
+                </button>
+
+
+                <button
+                    class="reponse"
+                    data-reponse="je-ne-sais-pas"
+                    type="button"
+                >
+                    Je ne sais pas
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ====================================== -->
+        <!-- FIN                                    -->
+        <!-- ====================================== -->
+
+        <div
+            id="fin-questionnaire"
+            class="cache"
+        >
+
+            <h1>
+                Merci 😊
+            </h1>
+
+            <p>
+                Tu as terminé le questionnaire.
+            </p>
+
+            <p>
+                Tes réponses ont bien été prises en compte.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
