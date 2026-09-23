@@ -120,6 +120,46 @@ const questionnaireFinMessage =
     );
 
 // ========================================
+// PROTECTION ANTI-ABUS LÉGÈRE
+// ========================================
+
+// Empêche les soumissions répétées depuis le même navigateur
+// pendant 10 minutes. Cette protection complète les contrôles
+// déjà présents côté Supabase, sans ajouter de CAPTCHA.
+const DELAI_ANTI_ABUS_MS = 10 * 60 * 1000;
+
+function cleAntiAbus() {
+    return "questionnaire_derniere_soumission_" + QUESTIONNAIRE_TOKEN;
+}
+
+function soumissionRecente() {
+    try {
+        const derniereSoumission =
+            Number(localStorage.getItem(cleAntiAbus()) || 0);
+
+        return (
+            derniereSoumission > 0 &&
+            Date.now() - derniereSoumission < DELAI_ANTI_ABUS_MS
+        );
+    } catch (error) {
+        return false;
+    }
+}
+
+function memoriserSoumission() {
+    try {
+        localStorage.setItem(
+            cleAntiAbus(),
+            String(Date.now())
+        );
+    } catch (error) {
+        // Si le stockage local est indisponible,
+        // le questionnaire continue normalement.
+    }
+}
+
+
+// ========================================
 // LIEN INVALIDE
 // ========================================
 
@@ -130,6 +170,9 @@ function afficherLienInvalide() {
     identification.classList.add(
         "cache"
     );
+
+    memoriserSoumission();
+
 
     questionnaire.classList.add(
         "cache"
@@ -283,6 +326,13 @@ initialiserQuestionnaire();
 boutonCommencer.addEventListener(
     "click",
     function () {
+
+        if (soumissionRecente()) {
+            alert(
+                "Un questionnaire a déjà été envoyé récemment depuis cet appareil. Réessaie dans quelques minutes."
+            );
+            return;
+        }
 
         accueil.classList.add(
             "cache"

@@ -872,3 +872,26 @@ button:disabled {
         border-radius: 15px;
     }
 }
+
+/* ====================================== */
+/* RENOUVELLEMENT LIEN / QR               */
+/* ====================================== */
+
+#regenerer-lien-questionnaire {
+    width: auto;
+    margin-top: 15px;
+    padding: 11px 16px;
+    font-size: 14px;
+}
+
+.info-renouvellement-lien {
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    #regenerer-lien-questionnaire {
+        width: 100%;
+    }
+}

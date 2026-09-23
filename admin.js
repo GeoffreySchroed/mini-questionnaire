@@ -31,6 +31,7 @@ const roleAdmin = document.getElementById("role-admin");
 const lienQuestionnaire = document.getElementById("lien-questionnaire");
 const boutonCopierLien = document.getElementById("copier-lien-questionnaire");
 const zoneQrCode = document.getElementById("qr-code");
+const boutonRegenererLien = document.getElementById("regenerer-lien-questionnaire");
 
 
 
@@ -112,6 +113,62 @@ formulairePersonnalisation.addEventListener(
         }
 
         alert("Personnalisation enregistrée.");
+    }
+);
+
+
+// ========================================
+// RENOUVELER LE LIEN + QR CODE
+// ========================================
+
+boutonRegenererLien.addEventListener(
+    "click",
+    async function () {
+
+        const confirmation = confirm(
+            "Générer un nouveau lien ?\n\n" +
+            "L'ancien lien et l'ancien QR code ne fonctionneront plus. " +
+            "Les questions, participants et résultats existants seront conservés."
+        );
+
+        if (!confirmation) {
+            return;
+        }
+
+        const ancienTexte = boutonRegenererLien.textContent;
+
+        boutonRegenererLien.disabled = true;
+        boutonRegenererLien.textContent = "Génération...";
+
+        const { error } = await supabaseClient.rpc(
+            "regenerer_mon_lien_questionnaire"
+        );
+
+        if (error) {
+            console.error(
+                "Erreur renouvellement lien :",
+                error.message
+            );
+
+            alert(
+                "Impossible de générer un nouveau lien.\n\n" +
+                error.message
+            );
+
+            boutonRegenererLien.disabled = false;
+            boutonRegenererLien.textContent = ancienTexte;
+            return;
+        }
+
+        await chargerLienQuestionnaire();
+
+        boutonRegenererLien.disabled = false;
+        boutonRegenererLien.textContent = ancienTexte;
+
+        alert(
+            "Nouveau lien généré.\n\n" +
+            "L'ancien lien et l'ancien QR code sont maintenant invalides."
+        );
     }
 );
 
