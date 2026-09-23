@@ -314,16 +314,15 @@ async function chargerLienQuestionnaire() {
     */
 
     const urlQuestionnaire =
-        new URL(
-            "index.html",
-            window.location.href
-        );
-
-
-    urlQuestionnaire.searchParams.set(
-        "q",
-        token
+    new URL(
+        "https://geoffreyschroed.github.io/mini-questionnaire/index.html"
     );
+
+
+urlQuestionnaire.searchParams.set(
+    "q",
+    token
+);
 
 
     const lienFinal =
