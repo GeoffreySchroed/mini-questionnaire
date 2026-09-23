@@ -31,7 +31,6 @@ const roleAdmin = document.getElementById("role-admin");
 const lienQuestionnaire = document.getElementById("lien-questionnaire");
 const boutonCopierLien = document.getElementById("copier-lien-questionnaire");
 const zoneQrCode = document.getElementById("qr-code");
-const boutonRegenererLien = document.getElementById("regenerer-lien-questionnaire");
 
 
 
@@ -118,62 +117,6 @@ formulairePersonnalisation.addEventListener(
 
 
 // ========================================
-// RENOUVELER LE LIEN + QR CODE
-// ========================================
-
-boutonRegenererLien.addEventListener(
-    "click",
-    async function () {
-
-        const confirmation = confirm(
-            "Générer un nouveau lien ?\n\n" +
-            "L'ancien lien et l'ancien QR code ne fonctionneront plus. " +
-            "Les questions, participants et résultats existants seront conservés."
-        );
-
-        if (!confirmation) {
-            return;
-        }
-
-        const ancienTexte = boutonRegenererLien.textContent;
-
-        boutonRegenererLien.disabled = true;
-        boutonRegenererLien.textContent = "Génération...";
-
-        const { error } = await supabaseClient.rpc(
-            "regenerer_mon_lien_questionnaire"
-        );
-
-        if (error) {
-            console.error(
-                "Erreur renouvellement lien :",
-                error.message
-            );
-
-            alert(
-                "Impossible de générer un nouveau lien.\n\n" +
-                error.message
-            );
-
-            boutonRegenererLien.disabled = false;
-            boutonRegenererLien.textContent = ancienTexte;
-            return;
-        }
-
-        await chargerLienQuestionnaire();
-
-        boutonRegenererLien.disabled = false;
-        boutonRegenererLien.textContent = ancienTexte;
-
-        alert(
-            "Nouveau lien généré.\n\n" +
-            "L'ancien lien et l'ancien QR code sont maintenant invalides."
-        );
-    }
-);
-
-
-// ========================================
 // ADMINISTRATEURS
 // ========================================
 
@@ -182,7 +125,8 @@ const listeAdministrateurs = document.getElementById("liste-administrateurs");
 const boutonAjouterAdministrateur = document.getElementById("ajouter-administrateur");
 const formulaireAdministrateur = document.getElementById("formulaire-administrateur");
 const champAdminNom = document.getElementById("admin-nom");
-const champAdminUuid = document.getElementById("admin-uuid");
+const champAdminEmail = document.getElementById("admin-email");
+const champAdminMotDePasse = document.getElementById("admin-mot-de-passe");
 const boutonEnregistrerAdministrateur = document.getElementById("enregistrer-administrateur");
 const boutonAnnulerAdministrateur = document.getElementById("annuler-administrateur");
 
@@ -237,6 +181,7 @@ const boutonClassementCouple = document.getElementById("classement-couple");
 const boutonTop5 = document.getElementById("afficher-top-5");
 const boutonTop10 = document.getElementById("afficher-top-10");
 const boutonTous = document.getElementById("afficher-tous");
+const champRechercheParticipant = document.getElementById("recherche-participant");
 
 
 // ========================================
@@ -261,6 +206,7 @@ let questionEnModification = null;
 
 let categorieClassement = "couple";
 let nombreResultats = 5;
+let rechercheParticipant = "";
 
 
 // ========================================
@@ -731,7 +677,8 @@ boutonAjouterAdministrateur.addEventListener(
     function () {
 
         champAdminNom.value = "";
-        champAdminUuid.value = "";
+        champAdminEmail.value = "";
+        champAdminMotDePasse.value = "";
 
         formulaireAdministrateur.classList.remove(
             "cache"
@@ -765,74 +712,63 @@ boutonEnregistrerAdministrateur.addEventListener(
     "click",
     async function () {
 
-        const nom =
-            champAdminNom.value.trim();
-
-        const uuid =
-            champAdminUuid.value.trim();
-
+        const nom = champAdminNom.value.trim();
+        const email = champAdminEmail.value.trim();
+        const motDePasse = champAdminMotDePasse.value;
 
         if (!nom) {
-
-            alert(
-                "Indique le nom de l'administrateur."
-            );
-
+            alert("Indique le nom de l'administrateur.");
             return;
         }
 
-
-        if (!uuid) {
-
-            alert(
-                "Indique l'UUID du compte Supabase."
-            );
-
+        if (!email) {
+            alert("Indique l'adresse e-mail de l'administrateur.");
             return;
         }
 
+        if (!motDePasse || motDePasse.length < 8) {
+            alert("Le mot de passe temporaire doit contenir au moins 8 caractères.");
+            return;
+        }
 
-        const {
-            error
-        } = await supabaseClient.rpc(
-            "ajouter_administrateur",
+        boutonEnregistrerAdministrateur.disabled = true;
+
+        const { data, error } = await supabaseClient.functions.invoke(
+            "gerer-administrateur",
             {
-                p_user_id: uuid,
-                p_nom: nom
+                body: {
+                    action: "creer",
+                    nom: nom,
+                    email: email,
+                    mot_de_passe: motDePasse
+                }
             }
         );
 
+        boutonEnregistrerAdministrateur.disabled = false;
 
-        if (error) {
-
-            console.error(
-                "Erreur ajout administrateur :",
-                error.message
-            );
-
+        if (error || !data || data.ok !== true) {
+            console.error("Erreur création administrateur :", error || data);
             alert(
-                "Impossible d'ajouter l'administrateur.\n\n" +
-                error.message
+                "Impossible de créer l'administrateur.\n\n" +
+                ((data && data.message) || (error && error.message) || "Erreur inconnue")
             );
-
             return;
         }
 
+        formulaireAdministrateur.classList.add("cache");
+        boutonAjouterAdministrateur.classList.remove("cache");
 
-        formulaireAdministrateur.classList.add(
-            "cache"
-        );
-
-        boutonAjouterAdministrateur.classList.remove(
-            "cache"
-        );
-
+        champAdminNom.value = "";
+        champAdminEmail.value = "";
+        champAdminMotDePasse.value = "";
 
         await chargerAdministrateurs();
 
-
         alert(
-            "Administrateur ajouté."
+            "Administrateur créé.\n\n" +
+            "Il peut maintenant se connecter avec :\n" +
+            email
         );
     }
 );
@@ -944,30 +880,31 @@ listeAdministrateurs.addEventListener(
             }
 
 
-            const {
-                error
-            } = await supabaseClient.rpc(
-                "supprimer_administrateur",
-                {
-                    p_user_id: id
-                }
-            );
+            const { data, error } =
+                await supabaseClient.functions.invoke(
+                    "gerer-administrateur",
+                    {
+                        body: {
+                            action: "supprimer",
+                            user_id: id
+                        }
+                    }
+                );
 
-
-            if (error) {
+            if (error || !data || data.ok !== true) {
 
                 console.error(
                     "Erreur suppression :",
-                    error.message
+                    error || data
                 );
 
                 alert(
-                    "Impossible de supprimer cet administrateur."
+                    "Impossible de supprimer cet administrateur.\n\n" +
+                    ((data && data.message) || (error && error.message) || "Erreur inconnue")
                 );
 
                 return;
             }
-
 
             await chargerAdministrateurs();
         }
@@ -1056,6 +993,28 @@ async function chargerQuestions() {
             );
 
 
+            const monter =
+                document.createElement("button");
+
+            monter.type = "button";
+            monter.textContent = "↑";
+            monter.title = "Monter la question";
+            monter.classList.add("deplacer-question", "bouton-secondaire");
+            monter.dataset.id = question.id;
+            monter.dataset.direction = "haut";
+
+
+            const descendre =
+                document.createElement("button");
+
+            descendre.type = "button";
+            descendre.textContent = "↓";
+            descendre.title = "Descendre la question";
+            descendre.classList.add("deplacer-question", "bouton-secondaire");
+            descendre.dataset.id = question.id;
+            descendre.dataset.direction = "bas";
+
+
             const modifier =
                 document.createElement("button");
 
@@ -1092,6 +1051,8 @@ async function chargerQuestions() {
                 String(question.actif);
 
 
+            actions.appendChild(monter);
+            actions.appendChild(descendre);
             actions.appendChild(modifier);
             actions.appendChild(statutBouton);
 
@@ -1143,6 +1104,78 @@ boutonAnnulerQuestion.addEventListener(
 listeQuestions.addEventListener(
     "click",
     async function (event) {
+
+        // DÉPLACER UNE QUESTION
+
+        if (event.target.classList.contains("deplacer-question")) {
+
+            const id = event.target.dataset.id;
+            const direction = event.target.dataset.direction;
+
+            const { data: toutesQuestions, error: erreurQuestions } =
+                await supabaseClient
+                    .from("questions")
+                    .select("id, ordre")
+                    .order("ordre", { ascending: true });
+
+            if (erreurQuestions || !toutesQuestions) {
+                alert("Impossible de modifier l'ordre des questions.");
+                return;
+            }
+
+            const index = toutesQuestions.findIndex(
+                function (question) {
+                    return question.id === id;
+                }
+            );
+
+            if (index === -1) {
+                return;
+            }
+
+            const indexCible =
+                direction === "haut"
+                    ? index - 1
+                    : index + 1;
+
+            if (indexCible < 0 || indexCible >= toutesQuestions.length) {
+                return;
+            }
+
+            const questionA = toutesQuestions[index];
+            const questionB = toutesQuestions[indexCible];
+
+            const { error: erreurA } =
+                await supabaseClient
+                    .from("questions")
+                    .update({ ordre: questionB.ordre })
+                    .eq("id", questionA.id);
+
+            if (erreurA) {
+                alert("Impossible de déplacer la question.");
+                return;
+            }
+
+            const { error: erreurB } =
+                await supabaseClient
+                    .from("questions")
+                    .update({ ordre: questionA.ordre })
+                    .eq("id", questionB.id);
+
+            if (erreurB) {
+                await supabaseClient
+                    .from("questions")
+                    .update({ ordre: questionA.ordre })
+                    .eq("id", questionA.id);
+
+                alert("Impossible de déplacer la question.");
+                return;
+            }
+
+            await chargerQuestions();
+            return;
+        }
+
 
         // MODIFIER
 
@@ -1480,6 +1513,23 @@ function mettreAJourFiltres() {
 
 
 // ========================================
+// RECHERCHE PARTICIPANT
+// ========================================
+
+champRechercheParticipant.addEventListener(
+    "input",
+    async function () {
+        rechercheParticipant =
+            champRechercheParticipant.value
+                .trim()
+                .toLowerCase();
+
+        await chargerResultats();
+    }
+);
+
+
+// ========================================
 // RÉSULTATS
 // ========================================
 
@@ -1552,17 +1602,54 @@ async function chargerResultats() {
     }
 
 
-    let affiches = resultats;
+    let affiches =
+        resultats.filter(
+            function (resultat) {
+
+                if (!rechercheParticipant) {
+                    return true;
+                }
+
+                const participant = resultat.participants;
+
+                if (!participant) {
+                    return false;
+                }
+
+                const texte =
+                    (
+                        participant.prenom + " " +
+                        participant.nom + " " +
+                        participant.age
+                    ).toLowerCase();
+
+                return texte.includes(rechercheParticipant);
+            }
+        );
 
 
     if (nombreResultats !== "tous") {
 
         affiches =
-            resultats.slice(
+            affiches.slice(
                 0,
                 nombreResultats
             );
     }
+
+
+    if (affiches.length === 0) {
+        listeResultats.appendChild(
+            creerParagraphe(
+                "Aucun participant ne correspond à la recherche."
+            )
+        );
+        return;
+    }
+
+
+    let pourcentagePrecedent = null;
+    let positionPrecedente = 0;
 
 
     affiches.forEach(
@@ -1612,19 +1699,31 @@ async function chargerResultats() {
             }
 
 
-            let position =
-                (index + 1) + ".";
+            let positionNumerique;
 
+            if (
+                pourcentagePrecedent !== null &&
+                pourcentage === pourcentagePrecedent
+            ) {
+                positionNumerique = positionPrecedente;
+            } else {
+                positionNumerique = index + 1;
+            }
 
-            if (index === 0) {
+            pourcentagePrecedent = pourcentage;
+            positionPrecedente = positionNumerique;
+
+            let position = positionNumerique + ".";
+
+            if (positionNumerique === 1) {
                 position = "🥇 1.";
             }
 
-            if (index === 1) {
+            if (positionNumerique === 2) {
                 position = "🥈 2.";
             }
 
-            if (index === 2) {
+            if (positionNumerique === 3) {
                 position = "🥉 3.";
             }
 
@@ -1856,6 +1955,9 @@ listeResultats.addEventListener(
             .select(`
                 reponse,
                 question_text,
+                points_amis,
+                points_un_soir,
+                points_couple,
                 questions (
                     text,
                     ordre
@@ -1965,8 +2067,18 @@ listeResultats.addEventListener(
 
                 blocReponse.appendChild(
                     creerParagraphe(
-                        "Réponse : " +
-                        choix
+                        "Réponse : " + choix,
+                        "reponse-choisie"
+                    )
+                );
+
+                blocReponse.appendChild(
+                    creerParagraphe(
+                        "👥 " + reponse.points_amis +
+                        "   •   🌙 " + reponse.points_un_soir +
+                        "   •   ❤️ " + reponse.points_couple +
+                        " points",
+                        "points-reponse"
                     )
                 );
 

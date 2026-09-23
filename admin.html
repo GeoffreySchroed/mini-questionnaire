@@ -142,18 +142,6 @@
 
                 </div>
 
-                <button
-                    id="regenerer-lien-questionnaire"
-                    type="button"
-                    class="bouton-danger"
-                >
-                    🔄 Générer un nouveau lien / QR code
-                </button>
-
-                <p class="info-renouvellement-lien">
-                    À utiliser si tu veux invalider immédiatement l'ancien lien et l'ancien QR code.
-                </p>
-
 
                 <div id="personnalisation-questionnaire">
 
@@ -266,14 +254,28 @@
                     >
 
 
-                    <label for="admin-uuid">
-                        UUID du compte Supabase
+                    <label for="admin-email">
+                        Adresse e-mail
                     </label>
 
                     <input
-                        type="text"
-                        id="admin-uuid"
-                        placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                        type="email"
+                        id="admin-email"
+                        placeholder="admin@exemple.com"
+                        autocomplete="off"
+                    >
+
+
+                    <label for="admin-mot-de-passe">
+                        Mot de passe temporaire
+                    </label>
+
+                    <input
+                        type="password"
+                        id="admin-mot-de-passe"
+                        placeholder="Minimum 8 caractères"
+                        minlength="8"
+                        autocomplete="new-password"
                     >
 
 
@@ -469,6 +471,20 @@
                         ❤️ Couple
                     </button>
 
+                </div>
+
+
+                <div class="recherche-participants">
+                    <label for="recherche-participant">
+                        Rechercher un participant
+                    </label>
+
+                    <input
+                        type="search"
+                        id="recherche-participant"
+                        placeholder="Prénom, nom ou âge..."
+                        autocomplete="off"
+                    >
                 </div>
 
 
