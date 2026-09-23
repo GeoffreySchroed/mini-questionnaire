@@ -98,6 +98,27 @@ const boutonsReponse =
     );
 
 
+
+const questionnaireTitre =
+    document.getElementById(
+        "questionnaire-titre"
+    );
+
+const questionnaireAccueil =
+    document.getElementById(
+        "questionnaire-accueil"
+    );
+
+const questionnaireFinTitre =
+    document.getElementById(
+        "questionnaire-fin-titre"
+    );
+
+const questionnaireFinMessage =
+    document.getElementById(
+        "questionnaire-fin-message"
+    );
+
 // ========================================
 // LIEN INVALIDE
 // ========================================
@@ -122,6 +143,43 @@ function afficherLienInvalide() {
         "cache"
     );
 
+}
+
+
+// ========================================
+// CHARGEMENT DE LA PERSONNALISATION
+// ========================================
+
+async function chargerConfiguration() {
+
+    const { data, error } =
+        await supabaseClient.rpc(
+            "get_questionnaire_configuration",
+            { p_token: QUESTIONNAIRE_TOKEN }
+        );
+
+    if (error) {
+        console.error(
+            "Erreur configuration questionnaire :",
+            error.message
+        );
+        return false;
+    }
+
+    const configuration =
+        Array.isArray(data) ? data[0] : data;
+
+    if (!configuration) {
+        return false;
+    }
+
+    questionnaireTitre.textContent = configuration.titre;
+    questionnaireAccueil.textContent = configuration.accueil;
+    boutonCommencer.textContent = configuration.bouton;
+    questionnaireFinTitre.textContent = configuration.fin_titre;
+    questionnaireFinMessage.textContent = configuration.fin_message;
+
+    return true;
 }
 
 
@@ -191,14 +249,20 @@ async function chargerQuestions() {
 
 async function initialiserQuestionnaire() {
 
-    const ok =
+    if (!QUESTIONNAIRE_TOKEN) {
+        afficherLienInvalide();
+        return;
+    }
+
+    const configurationOk =
+        await chargerConfiguration();
+
+    const questionsOk =
         await chargerQuestions();
 
-
-    if (!ok) {
-
+    if (!configurationOk || !questionsOk) {
+        afficherLienInvalide();
         return;
-
     }
 
 

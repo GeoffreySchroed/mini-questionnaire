@@ -94,7 +94,8 @@ label {
 }
 
 
-input {
+input,
+textarea {
     width: 100%;
 
     padding: 13px;
@@ -108,7 +109,8 @@ input {
 }
 
 
-input:focus {
+input:focus,
+textarea:focus {
     border-color: #7b68c8;
 
     box-shadow:
@@ -329,6 +331,42 @@ button:disabled {
 #qr-code canvas {
     max-width: 100%;
     height: auto;
+}
+
+
+
+
+/* ====================================== */
+/* PERSONNALISATION DU QUESTIONNAIRE      */
+/* ====================================== */
+
+#personnalisation-questionnaire {
+    margin-top: 25px;
+    padding: 20px;
+    background: white;
+    border: 1px solid #e5e5ee;
+    border-radius: 12px;
+}
+
+#personnalisation-questionnaire h3 {
+    margin-top: 0;
+}
+
+#formulaire-personnalisation {
+    margin-top: 15px;
+}
+
+#formulaire-personnalisation textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    resize: vertical;
+    outline: none;
 }
 
 

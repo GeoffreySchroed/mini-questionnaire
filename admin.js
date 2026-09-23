@@ -33,6 +33,89 @@ const boutonCopierLien = document.getElementById("copier-lien-questionnaire");
 const zoneQrCode = document.getElementById("qr-code");
 
 
+
+const formulairePersonnalisation = document.getElementById("formulaire-personnalisation");
+const personnalisationTitre = document.getElementById("personnalisation-titre");
+const personnalisationAccueil = document.getElementById("personnalisation-accueil");
+const personnalisationBouton = document.getElementById("personnalisation-bouton");
+const personnalisationFinTitre = document.getElementById("personnalisation-fin-titre");
+const personnalisationFinMessage = document.getElementById("personnalisation-fin-message");
+
+// ========================================
+// PERSONNALISATION DU QUESTIONNAIRE
+// ========================================
+
+async function chargerPersonnalisation() {
+
+    const { data: token, error: erreurToken } =
+        await supabaseClient.rpc("get_mon_lien_questionnaire");
+
+    if (erreurToken) {
+        console.error("Erreur token personnalisation :", erreurToken.message);
+        return;
+    }
+
+    const { data, error } =
+        await supabaseClient.rpc(
+            "get_questionnaire_configuration",
+            { p_token: token }
+        );
+
+    if (error) {
+        console.error("Erreur personnalisation :", error.message);
+        return;
+    }
+
+    const configuration = Array.isArray(data) ? data[0] : data;
+
+    if (!configuration) {
+        return;
+    }
+
+    personnalisationTitre.value = configuration.titre || "";
+    personnalisationAccueil.value = configuration.accueil || "";
+    personnalisationBouton.value = configuration.bouton || "";
+    personnalisationFinTitre.value = configuration.fin_titre || "";
+    personnalisationFinMessage.value = configuration.fin_message || "";
+}
+
+
+formulairePersonnalisation.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        const bouton = document.getElementById("enregistrer-personnalisation");
+        const ancienTexte = bouton.textContent;
+        bouton.disabled = true;
+        bouton.textContent = "Enregistrement...";
+
+        const { error } = await supabaseClient.rpc(
+            "modifier_questionnaire_configuration",
+            {
+                p_titre: personnalisationTitre.value.trim(),
+                p_accueil: personnalisationAccueil.value.trim(),
+                p_bouton: personnalisationBouton.value.trim(),
+                p_fin_titre: personnalisationFinTitre.value.trim(),
+                p_fin_message: personnalisationFinMessage.value.trim()
+            }
+        );
+
+        bouton.disabled = false;
+        bouton.textContent = ancienTexte;
+
+        if (error) {
+            console.error("Erreur enregistrement personnalisation :", error.message);
+            alert("Impossible d'enregistrer la personnalisation.\n\n" + error.message);
+            return;
+        }
+
+        alert("Personnalisation enregistrée.");
+    }
+);
+
+
 // ========================================
 // ADMINISTRATEURS
 // ========================================
@@ -1950,6 +2033,7 @@ async function chargerTableauDeBord() {
 
 
     await chargerLienQuestionnaire();
+    await chargerPersonnalisation();
     await chargerQuestions();
     await chargerResultats();
 
