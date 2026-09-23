@@ -966,3 +966,20 @@ button:disabled {
         padding: 14px;
     }
 }
+
+
+/* ========================================
+   V1.1 - COMPTE / DATES / SUPPRESSIONS
+   ======================================== */
+#section-compte { margin-top:30px; padding:25px; background:#f8f8fb; border:1px solid #e5e5ee; border-radius:15px; }
+#section-compte form { max-width:520px; }
+.bouton-lien { background:transparent; color:#7b68c8; padding:10px; margin-top:8px; }
+.bouton-lien:hover { background:#f2f0fa; }
+#tri-date-resultats { margin:16px 0; }
+#tri-date-resultats select { width:100%; padding:12px; border:1px solid #d8d8e5; border-radius:10px; background:white; font-size:16px; }
+.date-participation { font-size:14px; margin:6px 0; }
+.zone-danger-resultats { margin:20px 0; padding:16px; border:1px solid #efcaca; border-radius:12px; background:#fff7f7; }
+.zone-danger-resultats .bouton-danger { margin-top:0; }
+.zone-danger-resultats p { margin-bottom:0; font-size:13px; }
+#supprimer-participant { margin-top:25px; }
+@media (max-width:600px) { #section-compte { padding:15px; } }

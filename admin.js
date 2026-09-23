@@ -20,6 +20,10 @@ const connexionAdmin = document.getElementById("connexion-admin");
 const tableauDeBord = document.getElementById("tableau-de-bord");
 const formulaireConnexion = document.getElementById("formulaire-connexion");
 const boutonDeconnexion = document.getElementById("deconnexion");
+const boutonMotDePasseOublie = document.getElementById("mot-de-passe-oublie");
+const zoneReinitialisation = document.getElementById("reinitialisation-mot-de-passe");
+const formulaireReinitialisation = document.getElementById("formulaire-reinitialisation");
+const formulaireChangementMotDePasse = document.getElementById("formulaire-changement-mot-de-passe");
 const bienvenueAdmin = document.getElementById("bienvenue-admin");
 const roleAdmin = document.getElementById("role-admin");
 
@@ -182,6 +186,8 @@ const boutonTop5 = document.getElementById("afficher-top-5");
 const boutonTop10 = document.getElementById("afficher-top-10");
 const boutonTous = document.getElementById("afficher-tous");
 const champRechercheParticipant = document.getElementById("recherche-participant");
+const triDateResultats = document.getElementById("tri-date");
+const boutonSupprimerTousResultats = document.getElementById("supprimer-tous-resultats");
 
 
 // ========================================
@@ -195,6 +201,7 @@ const scoresParticipant = document.getElementById("scores-participant");
 const reponsesParticipant = document.getElementById("reponses-participant");
 const boutonFermerFiche = document.getElementById("fermer-fiche-participant");
 const croixFermerFiche = document.getElementById("croix-fermer-fiche");
+const boutonSupprimerParticipant = document.getElementById("supprimer-participant");
 
 
 // ========================================
@@ -207,6 +214,8 @@ let questionEnModification = null;
 let categorieClassement = "couple";
 let nombreResultats = 5;
 let rechercheParticipant = "";
+let triResultats = "classement";
+let participantOuvertId = null;
 
 
 // ========================================
@@ -302,6 +311,15 @@ function recupererPoints() {
     };
 }
 
+
+
+function formaterDate(dateIso) {
+    if (!dateIso) return "Date inconnue";
+    return new Intl.DateTimeFormat("fr-BE", {
+        dateStyle: "short",
+        timeStyle: "short"
+    }).format(new Date(dateIso));
+}
 
 // ========================================
 // PROFIL
@@ -1591,15 +1609,17 @@ async function chargerResultats() {
             pourcentage_un_soir,
             points_couple,
             pourcentage_couple,
+            date_creation,
             participants (
                 prenom,
                 nom,
-                age
+                age,
+                date_creation
             )
         `)
         .order(
-            colonne,
-            { ascending: false }
+            triResultats === "classement" ? colonne : "date_creation",
+            { ascending: triResultats === "ancien" }
         );
 
 
@@ -1788,6 +1808,13 @@ async function chargerResultats() {
 
             bloc.appendChild(
                 creerParagraphe(
+                    "📅 " + formaterDate(resultat.date_creation || participant.date_creation),
+                    "date-participation"
+                )
+            );
+
+            bloc.appendChild(
+                creerParagraphe(
                     emoji +
                     " " +
                     categorie +
@@ -1841,6 +1868,8 @@ listeResultats.addEventListener(
         const participantId =
             bloc.dataset.participantId;
 
+        participantOuvertId = participantId;
+
 
         const {
             data: participant,
@@ -1848,7 +1877,7 @@ listeResultats.addEventListener(
         } = await supabaseClient
             .from("participants")
             .select(
-                "id, prenom, nom, age, gsm, reseau"
+                "id, prenom, nom, age, gsm, reseau, date_creation"
             )
             .eq(
                 "id",
@@ -1916,6 +1945,12 @@ listeResultats.addEventListener(
                 "Âge : " +
                 participant.age +
                 " ans"
+            )
+        );
+
+        infosParticipant.appendChild(
+            creerParagraphe(
+                "📅 Participation : " + formaterDate(participant.date_creation)
             )
         );
 
@@ -2123,6 +2158,58 @@ listeResultats.addEventListener(
 
 
 // ========================================
+// TRI ET SUPPRESSIONS DES RÉSULTATS
+// ========================================
+
+triDateResultats.addEventListener("change", async function () {
+    triResultats = triDateResultats.value;
+    await chargerResultats();
+});
+
+boutonSupprimerParticipant.addEventListener("click", async function () {
+    if (!participantOuvertId) return;
+    if (!confirm("Supprimer définitivement ce participant, ses réponses et son résultat ?")) return;
+
+    const { error } = await supabaseClient.rpc("supprimer_mon_participant", {
+        p_participant_id: participantOuvertId
+    });
+
+    if (error) {
+        alert("Impossible de supprimer ce participant.\n\n" + error.message);
+        return;
+    }
+
+    participantOuvertId = null;
+    fermerFicheParticipant();
+    await chargerResultats();
+    alert("Participant supprimé.");
+});
+
+boutonSupprimerTousResultats.addEventListener("click", async function () {
+    const confirmation = prompt(
+        "Cette action supprimera TOUS tes participants, réponses et résultats.\n\nPour confirmer, écris exactement : SUPPRIMER"
+    );
+
+    if (confirmation !== "SUPPRIMER") {
+        if (confirmation !== null) alert("Suppression annulée : le mot de confirmation est incorrect.");
+        return;
+    }
+
+    if (!confirm("Dernière confirmation : supprimer définitivement tous tes résultats ?")) return;
+
+    const { error } = await supabaseClient.rpc("supprimer_tous_mes_resultats");
+    if (error) {
+        alert("Impossible de supprimer les résultats.\n\n" + error.message);
+        return;
+    }
+
+    fermerFicheParticipant();
+    participantOuvertId = null;
+    await chargerResultats();
+    alert("Tous tes résultats ont été supprimés.");
+});
+
+// ========================================
 // FILTRES
 // ========================================
 
@@ -2240,6 +2327,53 @@ async function chargerTableauDeBord() {
     return true;
 }
 
+
+// ========================================
+// MOT DE PASSE
+// ========================================
+
+formulaireChangementMotDePasse.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const nouveau = document.getElementById("nouveau-mot-de-passe").value;
+    const confirmation = document.getElementById("confirmation-nouveau-mot-de-passe").value;
+    if (nouveau.length < 8) { alert("Le mot de passe doit contenir au moins 8 caractères."); return; }
+    if (nouveau !== confirmation) { alert("Les deux mots de passe ne correspondent pas."); return; }
+    const { error } = await supabaseClient.auth.updateUser({ password: nouveau });
+    if (error) { alert("Impossible de modifier le mot de passe.\n\n" + error.message); return; }
+    formulaireChangementMotDePasse.reset();
+    alert("Mot de passe modifié.");
+});
+
+boutonMotDePasseOublie.addEventListener("click", async function () {
+    const email = document.getElementById("email").value.trim();
+    if (!email) { alert("Indique d'abord ton adresse e-mail."); return; }
+    const redirectTo = new URL("admin.html", window.location.href).toString();
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
+    if (error) { alert("Impossible d'envoyer l'e-mail de réinitialisation.\n\n" + error.message); return; }
+    alert("Si cette adresse correspond à un compte, un e-mail de réinitialisation vient d'être envoyé.");
+});
+
+formulaireReinitialisation.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const nouveau = document.getElementById("nouveau-mot-de-passe-reset").value;
+    const confirmation = document.getElementById("confirmation-mot-de-passe-reset").value;
+    if (nouveau.length < 8) { alert("Le mot de passe doit contenir au moins 8 caractères."); return; }
+    if (nouveau !== confirmation) { alert("Les deux mots de passe ne correspondent pas."); return; }
+    const { error } = await supabaseClient.auth.updateUser({ password: nouveau });
+    if (error) { alert("Impossible de modifier le mot de passe.\n\n" + error.message); return; }
+    formulaireReinitialisation.reset();
+    zoneReinitialisation.classList.add("cache");
+    connexionAdmin.classList.remove("cache");
+    alert("Mot de passe modifié. Tu peux maintenant te connecter.");
+});
+
+supabaseClient.auth.onAuthStateChange(function (event) {
+    if (event === "PASSWORD_RECOVERY") {
+        connexionAdmin.classList.add("cache");
+        tableauDeBord.classList.add("cache");
+        zoneReinitialisation.classList.remove("cache");
+    }
+});
 
 // ========================================
 // CONNEXION

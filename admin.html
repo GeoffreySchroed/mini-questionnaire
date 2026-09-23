@@ -66,8 +66,24 @@
                     Se connecter
                 </button>
 
+                <button id="mot-de-passe-oublie" type="button" class="bouton-lien">
+                    Mot de passe oublié ?
+                </button>
+
             </form>
 
+        </div>
+
+        <div id="reinitialisation-mot-de-passe" class="cache">
+            <h1>Nouveau mot de passe</h1>
+            <p>Choisis un nouveau mot de passe pour ton compte.</p>
+            <form id="formulaire-reinitialisation">
+                <label for="nouveau-mot-de-passe-reset">Nouveau mot de passe</label>
+                <input type="password" id="nouveau-mot-de-passe-reset" minlength="8" autocomplete="new-password" required>
+                <label for="confirmation-mot-de-passe-reset">Confirmer le mot de passe</label>
+                <input type="password" id="confirmation-mot-de-passe-reset" minlength="8" autocomplete="new-password" required>
+                <button type="submit">Enregistrer le nouveau mot de passe</button>
+            </form>
         </div>
 
 
@@ -446,6 +462,19 @@
 
 
 
+            <!-- COMPTE -->
+            <div id="section-compte">
+                <h2>🔐 Mon compte</h2>
+                <p>Modifie le mot de passe de ton compte administrateur.</p>
+                <form id="formulaire-changement-mot-de-passe">
+                    <label for="nouveau-mot-de-passe">Nouveau mot de passe</label>
+                    <input type="password" id="nouveau-mot-de-passe" minlength="8" autocomplete="new-password" required>
+                    <label for="confirmation-nouveau-mot-de-passe">Confirmer le nouveau mot de passe</label>
+                    <input type="password" id="confirmation-nouveau-mot-de-passe" minlength="8" autocomplete="new-password" required>
+                    <button type="submit">Changer mon mot de passe</button>
+                </form>
+            </div>
+
             <!-- RÉSULTATS -->
 
             <div id="section-resultats">
@@ -488,6 +517,15 @@
                 </div>
 
 
+                <div id="tri-date-resultats">
+                    <label for="tri-date">Ordre d'affichage</label>
+                    <select id="tri-date">
+                        <option value="classement">Classement</option>
+                        <option value="recent">Plus récents</option>
+                        <option value="ancien">Plus anciens</option>
+                    </select>
+                </div>
+
                 <div id="filtres-nombre">
 
                     <button id="afficher-top-5" type="button">
@@ -504,6 +542,13 @@
 
                 </div>
 
+
+                <div class="zone-danger-resultats">
+                    <button id="supprimer-tous-resultats" type="button" class="bouton-danger">
+                        🧹 Supprimer tous mes résultats
+                    </button>
+                    <p>Supprime définitivement tous tes participants, réponses et résultats. Les questions ne sont pas supprimées.</p>
+                </div>
 
                 <div id="liste-resultats">
 
@@ -561,6 +606,10 @@
         <div id="reponses-participant">
         </div>
 
+
+        <button id="supprimer-participant" type="button" class="bouton-danger">
+            🗑️ Supprimer ce participant
+        </button>
 
         <button
             id="fermer-fiche-participant"
