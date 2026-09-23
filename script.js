@@ -171,9 +171,6 @@ function afficherLienInvalide() {
         "cache"
     );
 
-    memoriserSoumission();
-
-
     questionnaire.classList.add(
         "cache"
     );
@@ -616,6 +613,11 @@ async function terminerQuestionnaire() {
         return;
 
     }
+
+
+    // La soumission Supabase a réussi :
+    // on mémorise maintenant l'envoi pour l'anti-abus.
+    memoriserSoumission();
 
 
     questionnaire.classList.add(
