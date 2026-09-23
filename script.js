@@ -343,6 +343,21 @@ formulaireIdentification.addEventListener(
         };
 
 
+        // Au moins un moyen de contact est obligatoire
+        if (
+            utilisateur.gsm === "" &&
+            utilisateur.reseau === ""
+        ) {
+
+            alert(
+                "Indique au moins un moyen de contact : ton numéro de GSM ou un réseau social."
+            );
+
+            return;
+
+        }
+
+
         questionActuelle = 0;
 
         reponsesUtilisateur = [];

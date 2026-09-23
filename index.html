@@ -102,6 +102,7 @@
                 <input
                     type="text"
                     id="prenom"
+                    maxlength="50"
                     required
                 >
 
@@ -113,6 +114,7 @@
                 <input
                     type="text"
                     id="nom"
+                    maxlength="50"
                     required
                 >
 
@@ -130,6 +132,11 @@
                 >
 
 
+                <p>
+                    <strong>Moyen de contact *</strong><br>
+                    Indique au moins ton numéro de GSM ou un réseau social.
+                </p>
+
                 <label for="gsm">
                     Numéro de GSM
                 </label>
@@ -137,7 +144,8 @@
                 <input
                     type="tel"
                     id="gsm"
-                    placeholder="Optionnel"
+                    maxlength="30"
+                    placeholder="Ex. : 04xx xx xx xx"
                 >
 
 
@@ -148,6 +156,7 @@
                 <input
                     type="text"
                     id="reseau"
+                    maxlength="100"
                     placeholder="Instagram, Facebook..."
                 >
 
