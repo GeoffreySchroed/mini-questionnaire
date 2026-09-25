@@ -34,6 +34,7 @@ const roleAdmin = document.getElementById("role-admin");
 
 const lienQuestionnaire = document.getElementById("lien-questionnaire");
 const boutonCopierLien = document.getElementById("copier-lien-questionnaire");
+const boutonRegenererLien = document.getElementById("regenerer-lien-questionnaire");
 const zoneQrCode = document.getElementById("qr-code");
 
 
@@ -44,6 +45,32 @@ const personnalisationAccueil = document.getElementById("personnalisation-accuei
 const personnalisationBouton = document.getElementById("personnalisation-bouton");
 const personnalisationFinTitre = document.getElementById("personnalisation-fin-titre");
 const personnalisationFinMessage = document.getElementById("personnalisation-fin-message");
+
+// Régénérer le lien public
+boutonRegenererLien.addEventListener("click", async function () {
+    const confirmation = confirm(
+        "Créer un nouveau lien public ?\n\nL'ancien lien et son ancien QR code ne permettront plus d'accéder au questionnaire."
+    );
+    if (!confirmation) return;
+
+    const ancienTexte = boutonRegenererLien.textContent;
+    boutonRegenererLien.disabled = true;
+    boutonRegenererLien.textContent = "Génération...";
+
+    const { error } = await supabaseClient.rpc("regenerer_mon_lien_questionnaire");
+
+    boutonRegenererLien.disabled = false;
+    boutonRegenererLien.textContent = ancienTexte;
+
+    if (error) {
+        alert("Impossible de générer un nouveau lien.\n\n" + error.message);
+        return;
+    }
+
+    await chargerLienQuestionnaire();
+    alert("Nouveau lien généré. L'ancien lien n'est plus valide.");
+});
+
 
 // ========================================
 // PERSONNALISATION DU QUESTIONNAIRE
@@ -188,6 +215,7 @@ const boutonTous = document.getElementById("afficher-tous");
 const champRechercheParticipant = document.getElementById("recherche-participant");
 const triDateResultats = document.getElementById("tri-date");
 const boutonSupprimerTousResultats = document.getElementById("supprimer-tous-resultats");
+const filtresSuivi = document.getElementById("filtres-suivi");
 
 const statTotal = document.getElementById("stat-total");
 const statSemaine = document.getElementById("stat-semaine");
@@ -204,6 +232,7 @@ const ficheParticipant = document.getElementById("fiche-participant");
 const fondPopup = document.getElementById("fond-popup");
 const infosParticipant = document.getElementById("infos-participant");
 const scoresParticipant = document.getElementById("scores-participant");
+const resumeParticipant = document.getElementById("resume-participant");
 const reponsesParticipant = document.getElementById("reponses-participant");
 const boutonFermerFiche = document.getElementById("fermer-fiche-participant");
 const croixFermerFiche = document.getElementById("croix-fermer-fiche");
@@ -226,6 +255,7 @@ let categorieClassement = "couple";
 let nombreResultats = 5;
 let rechercheParticipant = "";
 let triResultats = "classement";
+let filtreSuivi = "tous";
 let participantOuvertId = null;
 
 
@@ -1771,6 +1801,19 @@ async function chargerResultats() {
         );
 
 
+    if (filtreSuivi === "favoris") {
+        affiches = affiches.filter(
+            resultat => resultat.participants && resultat.participants.favori
+        );
+    } else if (filtreSuivi !== "tous") {
+        affiches = affiches.filter(
+            resultat =>
+                resultat.participants &&
+                (resultat.participants.statut || "a_contacter") === filtreSuivi
+        );
+    }
+
+
     if (nombreResultats !== "tous") {
 
         affiches =
@@ -2140,6 +2183,37 @@ listeResultats.addEventListener(
         );
 
 
+        resumeParticipant.replaceChildren();
+
+        const scoresResume = [
+            { nom: "Couple", emoji: "❤️", valeur: Number(resultat.pourcentage_couple) || 0 },
+            { nom: "Un soir", emoji: "🌙", valeur: Number(resultat.pourcentage_un_soir) || 0 },
+            { nom: "Amis", emoji: "👥", valeur: Number(resultat.pourcentage_amis) || 0 }
+        ].sort((a, b) => b.valeur - a.valeur);
+
+        const titreResume = document.createElement("h3");
+        titreResume.textContent = "Résumé du profil";
+        resumeParticipant.appendChild(titreResume);
+
+        const texteResume = document.createElement("p");
+        const premier = scoresResume[0];
+        const deuxieme = scoresResume[1];
+        const ecart = premier.valeur - deuxieme.valeur;
+
+        texteResume.textContent =
+            ecart < 5
+                ? "Profil assez équilibré : " +
+                  premier.emoji + " " + premier.nom + " " + premier.valeur + "% et " +
+                  deuxieme.emoji + " " + deuxieme.nom + " " + deuxieme.valeur +
+                  "% sont très proches."
+                : "Le score le plus élevé est " +
+                  premier.emoji + " " + premier.nom + " avec " + premier.valeur +
+                  "%, devant " + deuxieme.emoji + " " + deuxieme.nom +
+                  " à " + deuxieme.valeur + "%.";
+
+        resumeParticipant.appendChild(texteResume);
+
+
         const {
             data: reponses,
             error: erreurReponses
@@ -2388,6 +2462,24 @@ boutonSupprimerTousResultats.addEventListener("click", async function () {
     await chargerResultats();
     alert("Tous tes résultats ont été supprimés.");
 });
+
+// ========================================
+// FILTRES DE SUIVI
+// ========================================
+
+filtresSuivi.addEventListener("click", async function (event) {
+    const bouton = event.target.closest("button[data-suivi]");
+    if (!bouton) return;
+
+    filtreSuivi = bouton.dataset.suivi;
+
+    filtresSuivi.querySelectorAll("button").forEach(function (element) {
+        element.classList.toggle("actif", element === bouton);
+    });
+
+    await chargerResultats();
+});
+
 
 // ========================================
 // FILTRES

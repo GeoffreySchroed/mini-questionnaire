@@ -156,6 +156,14 @@
                         Copier
                     </button>
 
+                    <button
+                        id="regenerer-lien-questionnaire"
+                        type="button"
+                        class="bouton-secondaire"
+                    >
+                        Nouveau lien
+                    </button>
+
                 </div>
 
 
@@ -253,9 +261,8 @@
 
 
                     <p class="info-admin">
-                        Crée d'abord le compte dans
-                        Supabase → Authentication → Users,
-                        puis copie ici son UUID.
+                        Crée ici un compte administrateur invité.
+                        Son accès et son questionnaire seront séparés des tiens.
                     </p>
 
 
@@ -538,6 +545,14 @@
                 </div>
 
 
+                <div id="filtres-suivi" aria-label="Filtres de suivi">
+                    <button type="button" class="actif" data-suivi="tous">Tous</button>
+                    <button type="button" data-suivi="favoris">⭐ Favoris</button>
+                    <button type="button" data-suivi="a_contacter">À contacter</button>
+                    <button type="button" data-suivi="contacte">Contactés</button>
+                    <button type="button" data-suivi="ecarte">Écartés</button>
+                </div>
+
                 <div id="filtres-categorie">
 
                     <button id="classement-amis" type="button">
@@ -690,6 +705,9 @@
         <h3>Résultats</h3>
 
         <div id="scores-participant">
+        </div>
+
+        <div id="resume-participant" class="resume-participant">
         </div>
 
 

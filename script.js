@@ -92,6 +92,12 @@ const texteQuestion =
         "texte-question"
     );
 
+const barreProgressionQuestionnaire =
+    document.getElementById("barre-progression-questionnaire");
+
+const pourcentageProgression =
+    document.getElementById("pourcentage-progression");
+
 const boutonsReponse =
     document.querySelectorAll(
         ".reponse"
@@ -408,6 +414,17 @@ function afficherQuestion() {
         " sur " +
         questions.length;
 
+
+    const progression =
+        Math.round(
+            ((questionActuelle + 1) / questions.length) * 100
+        );
+
+    barreProgressionQuestionnaire.style.width =
+        progression + "%";
+
+    pourcentageProgression.textContent =
+        progression + " %";
 
     texteQuestion.textContent =
         question.text;

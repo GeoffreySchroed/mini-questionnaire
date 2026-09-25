@@ -1380,3 +1380,75 @@ button:disabled {
         width: 100%;
     }
 }
+
+
+/* ========================================
+   V1.5 À V1.8
+   ======================================== */
+
+#filtres-suivi {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+#filtres-suivi button {
+    width: auto;
+    flex: 1 1 145px;
+    margin: 0;
+    padding: 10px 12px;
+    background: white;
+    color: #555;
+    border: 1px solid #d8d8e5;
+    font-size: 14px;
+}
+#filtres-suivi button.actif {
+    background: #7b68c8;
+    color: white;
+    border-color: #7b68c8;
+}
+.resume-participant {
+    margin: 18px 0;
+    padding: 16px;
+    background: #f8f8fb;
+    border: 1px solid #e5e5ee;
+    border-radius: 12px;
+}
+.resume-participant h3 { margin: 0 0 8px; }
+.resume-participant p { margin: 0; }
+
+.progression-questionnaire {
+    width: 100%;
+    height: 9px;
+    margin: 8px 0 5px;
+    overflow: hidden;
+    background: #eeeef4;
+    border-radius: 999px;
+}
+#barre-progression-questionnaire {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #e78ab0);
+    border-radius: inherit;
+    transition: width 0.25s ease;
+}
+#pourcentage-progression {
+    margin: 0 0 16px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #7b68c8;
+    text-align: right;
+}
+#regenerer-lien-questionnaire {
+    width: auto;
+    margin: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+@media (max-width: 650px) {
+    .ligne-lien { flex-wrap: wrap; }
+    .ligne-lien input { flex-basis: 100%; }
+    #copier-lien-questionnaire,
+    #regenerer-lien-questionnaire { flex: 1; }
+    #filtres-suivi button { flex-basis: calc(50% - 8px); }
+}
