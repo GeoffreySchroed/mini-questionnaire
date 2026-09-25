@@ -22,6 +22,77 @@
 
 <body>
 
+    <!-- ====================================== -->
+    <!-- CONFIDENTIALITÉ / CONSENTEMENT         -->
+    <!-- ====================================== -->
+
+    <div id="confidentialite-modal" class="confidentialite-overlay cache" role="dialog" aria-modal="true" aria-labelledby="confidentialite-titre">
+        <div class="confidentialite-modal">
+            <h1 id="confidentialite-titre">🔒 Confidentialité</h1>
+
+            <p>
+                Les informations que tu renseignes dans ce questionnaire sont utilisées
+                uniquement dans le cadre de celui-ci.
+            </p>
+
+            <p>
+                Elles permettent à l'administrateur du questionnaire de consulter tes réponses
+                et d'en assurer le suivi. Elles ne sont pas rendues publiques et sont conservées
+                pendant une durée maximale de <strong>6 mois</strong>.
+            </p>
+
+            <p>
+                Tu peux demander l'accès, la rectification ou la suppression de tes données
+                à tout moment en écrivant à
+                <a href="mailto:justbetweenus386@gmail.com">justbetweenus386@gmail.com</a>.
+            </p>
+
+            <details class="confidentialite-details">
+                <summary>En savoir plus sur la confidentialité</summary>
+                <div class="confidentialite-details-contenu">
+                    <p>
+                        Les informations renseignées dans ce questionnaire sont utilisées uniquement
+                        pour permettre son fonctionnement et le suivi des participations.
+                    </p>
+                    <p>
+                        <strong>Données concernées :</strong> identité, âge, moyen de contact et réponses
+                        fournies au questionnaire. Des informations résultant de la participation peuvent
+                        également être utilisées par l'administrateur pour organiser et suivre les participations.
+                    </p>
+                    <p>
+                        <strong>Accès aux données :</strong> les informations ne sont pas publiques. Elles sont
+                        accessibles uniquement dans l'espace d'administration associé au questionnaire et aux
+                        services techniques nécessaires à son fonctionnement.
+                    </p>
+                    <p>
+                        <strong>Durée de conservation :</strong> les données sont conservées pendant une durée
+                        maximale de 6 mois, sauf suppression anticipée.
+                    </p>
+                    <p>
+                        <strong>Tes droits :</strong> tu peux demander des informations concernant tes données,
+                        leur rectification ou leur suppression, ainsi que retirer ton consentement.
+                    </p>
+                    <p>
+                        Pour toute demande concernant tes données :
+                        <a href="mailto:justbetweenus386@gmail.com">justbetweenus386@gmail.com</a>.
+                    </p>
+                    <p>
+                        Si tu ne souhaites pas que tes données soient utilisées dans ce cadre,
+                        tu peux simplement ne pas participer au questionnaire.
+                    </p>
+                </div>
+            </details>
+
+            <label class="confidentialite-consentement" for="accord-confidentialite">
+                <input type="checkbox" id="accord-confidentialite">
+                <span>
+                    J'ai pris connaissance de ces informations et j'accepte que mes données
+                    soient utilisées dans le cadre de ce questionnaire.
+                </span>
+            </label>
+        </div>
+    </div>
+
     <div class="container">
 
 
@@ -161,56 +232,7 @@
                 >
 
 
-                <div
-                    style="
-                        margin-top: 22px;
-                        padding: 14px;
-                        background: #f8f8fb;
-                        border: 1px solid #e5e5ee;
-                        border-radius: 10px;
-                    "
-                >
-                    <p
-                        style="
-                            margin-top: 0;
-                            margin-bottom: 10px;
-                            font-size: 13px;
-                        "
-                    >
-                        Les informations et réponses fournies seront enregistrées
-                        et pourront être consultées par l'administrateur de ce questionnaire.
-                    </p>
 
-                    <label
-                        for="accord-donnees"
-                        style="
-                            display: flex;
-                            align-items: flex-start;
-                            gap: 10px;
-                            margin: 0;
-                            font-size: 13px;
-                            font-weight: normal;
-                            cursor: pointer;
-                        "
-                    >
-                        <input
-                            type="checkbox"
-                            id="accord-donnees"
-                            required
-                            style="
-                                width: auto;
-                                margin-top: 2px;
-                                padding: 0;
-                                flex-shrink: 0;
-                            "
-                        >
-
-                        <span>
-                            J'ai compris que mes informations et mes réponses
-                            seront enregistrées. *
-                        </span>
-                    </label>
-                </div>
 
 
                 <button type="submit">
@@ -235,12 +257,6 @@
             <p id="numero-question">
                 Question
             </p>
-
-            <div class="progression-questionnaire" aria-hidden="true">
-                <div id="barre-progression-questionnaire"></div>
-            </div>
-
-            <p id="pourcentage-progression">0 %</p>
 
 
             <h1 id="texte-question">

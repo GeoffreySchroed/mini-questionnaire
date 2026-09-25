@@ -1246,619 +1246,108 @@ button:disabled {
 
 
 /* ========================================
-   V1.4 - SUIVI PRIVÉ DES PARTICIPANTS
+   V2.2 - CONFIDENTIALITÉ
    ======================================== */
 
-#suivi-participant {
-    margin: 22px 0;
-    padding: 18px;
-    background: #f8f8fb;
-    border: 1px solid #e5e5ee;
-    border-radius: 14px;
-}
-
-#suivi-participant h3 {
-    margin-top: 0;
-    margin-bottom: 14px;
-}
-
-.ligne-favori {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0 0 14px;
-    padding: 12px;
-    background: white;
-    border: 1px solid #e5e5ee;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.ligne-favori input {
-    width: auto;
-    margin: 0;
-    flex-shrink: 0;
-}
-
-#participant-statut {
-    width: 100%;
-    padding: 12px 13px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: white;
-    font-size: 16px;
-    outline: none;
-}
-
-#participant-statut:focus {
-    border-color: #7b68c8;
-    box-shadow: 0 0 0 2px rgba(123, 104, 200, 0.10);
-}
-
-#participant-note-privee {
-    min-height: 110px;
-    resize: vertical;
-    font-family: Arial, sans-serif;
-}
-
-.ligne-enregistrement-suivi {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 14px;
-}
-
-#enregistrer-suivi-participant {
-    width: auto;
-    margin: 0;
-    padding: 12px 16px;
-}
-
-.message-suivi {
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.message-suivi.succes {
-    color: #27864a;
-}
-
-.message-suivi.erreur {
-    color: #c34848;
-}
-
-.suivi-resume-resultat {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin: 6px 0 10px;
-}
-
-.badge-suivi {
-    display: inline-flex;
-    align-items: center;
-    width: auto;
-    padding: 5px 9px;
-    border-radius: 999px;
-    background: #eeeef4;
-    color: #555;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.badge-favori {
-    background: #fff5cf;
-    color: #7a6200;
-}
-
-.statut-a_contacter {
-    background: #eeeef4;
-    color: #555;
-}
-
-.statut-contacte {
-    background: #e7f6ec;
-    color: #277442;
-}
-
-.statut-ecarte {
-    background: #f8e8e8;
-    color: #a03e3e;
-}
-
-@media (max-width: 600px) {
-    #suivi-participant {
-        padding: 14px;
-    }
-
-    .ligne-enregistrement-suivi {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    #enregistrer-suivi-participant {
-        width: 100%;
-    }
-}
-
-
-/* ========================================
-   V1.5 À V1.8
-   ======================================== */
-
-#filtres-suivi {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 15px;
-}
-#filtres-suivi button {
-    width: auto;
-    flex: 1 1 145px;
-    margin: 0;
-    padding: 10px 12px;
-    background: white;
-    color: #555;
-    border: 1px solid #d8d8e5;
-    font-size: 14px;
-}
-#filtres-suivi button.actif {
-    background: #7b68c8;
-    color: white;
-    border-color: #7b68c8;
-}
-.resume-participant {
-    margin: 18px 0;
-    padding: 16px;
-    background: #f8f8fb;
-    border: 1px solid #e5e5ee;
-    border-radius: 12px;
-}
-.resume-participant h3 { margin: 0 0 8px; }
-.resume-participant p { margin: 0; }
-
-.progression-questionnaire {
-    width: 100%;
-    height: 9px;
-    margin: 8px 0 5px;
+body.confidentialite-bloquee {
     overflow: hidden;
-    background: #eeeef4;
-    border-radius: 999px;
-}
-#barre-progression-questionnaire {
-    width: 0;
-    height: 100%;
-    background: linear-gradient(90deg, #667eea, #e78ab0);
-    border-radius: inherit;
-    transition: width 0.25s ease;
-}
-#pourcentage-progression {
-    margin: 0 0 16px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #7b68c8;
-    text-align: right;
-}
-#regenerer-lien-questionnaire {
-    width: auto;
-    margin: 0;
-    padding-left: 16px;
-    padding-right: 16px;
-}
-@media (max-width: 650px) {
-    .ligne-lien { flex-wrap: wrap; }
-    .ligne-lien input { flex-basis: 100%; }
-    #copier-lien-questionnaire,
-    #regenerer-lien-questionnaire { flex: 1; }
-    #filtres-suivi button { flex-basis: calc(50% - 8px); }
 }
 
-
-/* V2.0 — Analyse des profils */
-#statistiques-resultats { grid-template-columns: repeat(3,minmax(0,1fr)); }
-.comparaison-profils,.analyse-participant{margin:18px 0;padding:16px;background:#f8f8fb;border:1px solid #e5e5ee;border-radius:14px}
-.comparaison-profils h3,.analyse-participant h3{margin-top:0}
-.comparaison-controles{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center}
-.comparaison-controles select,.comparaison-controles button{margin:0}
-.comparaison-resultat{margin-top:14px}
-.comparaison-grille{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.comparaison-score{display:flex;flex-direction:column;gap:5px;padding:12px;background:white;border:1px solid #e5e5ee;border-radius:10px}
-.comparaison-score span{font-size:18px;font-weight:700}.comparaison-score small{color:#777}
-#orientation-participant{margin:0 0 15px;padding:12px;background:white;border-radius:10px;font-weight:600}
-.analyse-grille{display:grid;grid-template-columns:1fr 1fr;gap:14px}.analyse-participant h4{margin:12px 0 8px}
-.analyse-puce{margin-bottom:7px;padding:9px 10px;border-radius:9px;font-size:13px}
-.analyse-puce.positif{background:#edf8f1;border:1px solid #cfe8d8}.analyse-puce.vigilance{background:#fff5ed;border:1px solid #f1d8c6}.analyse-puce.neutre{background:white;border:1px solid #e5e5ee}
-.reponse-influente{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;padding:10px;background:white;border:1px solid #e5e5ee;border-radius:9px;font-size:13px}.reponse-influente span{color:#666}
-@media(max-width:750px){#statistiques-resultats{grid-template-columns:repeat(2,minmax(0,1fr))}.comparaison-controles,.comparaison-grille,.analyse-grille{grid-template-columns:1fr}.comparaison-controles button{width:100%}}
-
-/* V2.0 - Personnalisation / Administrateurs / Mon compte repliables */
-.section-repliable-wrapper{padding:0!important;overflow:hidden}
-.panneau-repliable{width:100%}
-.panneau-repliable>summary{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:22px 25px;cursor:pointer;list-style:none;user-select:none}
-.panneau-repliable>summary::-webkit-details-marker{display:none}
-.panneau-repliable>summary:hover{background:rgba(123,104,200,.05)}
-.panneau-repliable>summary>span:first-child{display:flex;flex-direction:column;gap:4px}
-.panneau-repliable>summary strong{color:#333;font-size:1.5em}
-.panneau-repliable>summary small{color:#777;font-size:13px;font-weight:normal}
-.panneau-repliable[open]>summary .indicateur-repli{transform:rotate(180deg)}
-.contenu-panneau-repliable{padding:0 25px 25px;border-top:1px solid #e5e5ee}
-.panneau-repliable-interne{margin-top:18px;border:1px solid #e5e5ee;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.55)}
-.panneau-repliable-interne>summary{padding:16px 18px}
-.panneau-repliable-interne>summary strong{font-size:18px}
-.panneau-repliable-interne .contenu-panneau-repliable{padding:18px}
-@media(max-width:600px){
-.panneau-repliable>summary{padding:18px}.panneau-repliable>summary strong{font-size:20px}.contenu-panneau-repliable{padding:0 15px 18px}
-.panneau-repliable-interne>summary{padding:15px}.panneau-repliable-interne>summary strong{font-size:17px}.panneau-repliable-interne .contenu-panneau-repliable{padding:15px}
+.confidentialite-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(15, 18, 28, 0.72);
+    backdrop-filter: blur(5px);
 }
 
-
-/* ========================================
-   V2.1 — ERGONOMIE MOBILE
-   Navigation fixe sans masquer les sections
-   ======================================== */
-
-.navigation-mobile-admin {
+.confidentialite-overlay.cache {
     display: none;
 }
 
-@media (max-width: 750px) {
-    body {
-        padding-bottom: 86px;
-    }
-
-    .container-admin {
-        padding-bottom: 18px;
-    }
-
-    .navigation-mobile-admin {
-        position: fixed;
-        z-index: 900;
-        left: 50%;
-        bottom: max(8px, env(safe-area-inset-bottom));
-        transform: translateX(-50%);
-        display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        width: min(calc(100% - 18px), 620px);
-        min-height: 64px;
-        padding: 6px;
-        background: rgba(255,255,255,.96);
-        border: 1px solid rgba(0,0,0,.10);
-        border-radius: 18px;
-        box-shadow: 0 8px 30px rgba(0,0,0,.18);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-    }
-
-    .nav-mobile-bouton {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 2px;
-        min-width: 0;
-        min-height: 52px;
-        margin: 0;
-        padding: 5px 2px;
-        border: 0;
-        border-radius: 13px;
-        background: transparent;
-        color: #666;
-        font-size: 10px;
-        line-height: 1.1;
-        box-shadow: none;
-    }
-
-    .nav-mobile-bouton:hover {
-        transform: none;
-    }
-
-    .nav-mobile-bouton.actif {
-        background: rgba(123,104,200,.11);
-        color: #4d3f8d;
-    }
-
-    .nav-mobile-icone {
-        display: block;
-        font-size: 20px;
-        line-height: 22px;
-        font-weight: 700;
-    }
-
-    .nav-mobile-badge {
-        position: absolute;
-        top: 1px;
-        right: 7px;
-        min-width: 18px;
-        height: 18px;
-        padding: 0 4px;
-        border-radius: 9px;
-        background: #333;
-        color: white;
-        font-size: 10px;
-        line-height: 18px;
-        text-align: center;
-        font-weight: 700;
-    }
-
-    #section-mon-questionnaire,
-    #section-administrateurs,
-    #section-questions,
-    #section-compte,
-    #section-resultats {
-        scroll-margin-top: 16px;
-    }
-
-    .entete-admin {
-        gap: 10px;
-    }
-
-    .entete-admin h1 {
-        font-size: 24px;
-    }
-
-    #deconnexion {
-        width: auto;
-        min-width: 0;
-        padding: 9px 11px;
-        font-size: 12px;
-    }
-
-    #section-resultats {
-        padding-bottom: 12px;
-    }
+.confidentialite-modal {
+    width: min(100%, 560px);
+    max-height: calc(100vh - 36px);
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 24px;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
 }
 
-@media (min-width: 751px) {
-    .navigation-mobile-admin {
-        display: none !important;
-    }
-}
-
-
-/* ========================================
-   V2.1 — ÉCRANS APPLICATION MOBILE
-   ======================================== */
-.ecran-mobile-app { display: none; }
-
-@media (max-width: 750px) {
-    .ecran-mobile-app:not(.cache) {
-        display: block;
-        margin: 18px 0 90px;
-        padding: 16px;
-        border-radius: 18px;
-        background: #fff;
-        box-shadow: 0 8px 28px rgba(0,0,0,.08);
-        scroll-margin-top: 12px;
-    }
-
-    .entete-ecran-mobile h2 { margin: 0 0 4px; }
-    .entete-ecran-mobile p { margin: 0 0 14px; opacity: .72; }
-
-    .recherche-mobile-app {
-        width: 100%;
-        margin: 0 0 14px;
-    }
-
-    .liste-profils-mobile {
-        display: grid;
-        gap: 10px;
-    }
-
-    .carte-profil-mobile {
-        width: 100%;
-        margin: 0;
-        padding: 14px;
-        text-align: left;
-        border: 1px solid rgba(0,0,0,.08);
-        border-radius: 15px;
-        background: #fff;
-        color: inherit;
-        box-shadow: 0 3px 14px rgba(0,0,0,.06);
-    }
-
-    .carte-profil-mobile:hover { transform: none; }
-
-    .carte-profil-mobile-entete {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        font-size: 16px;
-    }
-
-    .etoile-profil-mobile {
-        font-size: 20px;
-        line-height: 1;
-    }
-
-    .carte-profil-mobile-meta {
-        margin-top: 4px;
-        font-size: 12px;
-        opacity: .68;
-    }
-
-    .mini-scores-mobile {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
-        margin-top: 10px;
-    }
-
-    .mini-scores-mobile span {
-        padding: 7px 4px;
-        border-radius: 10px;
-        background: rgba(0,0,0,.045);
-        text-align: center;
-        font-size: 12px;
-        font-weight: 700;
-    }
-
-    .etat-vide-mobile {
-        padding: 22px 12px;
-        text-align: center;
-        opacity: .65;
-    }
-
-    .grille-reglages-mobile {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .carte-reglage-mobile {
-        min-height: 105px;
-        margin: 0;
-        padding: 14px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        gap: 6px;
-        text-align: left;
-        border-radius: 15px;
-    }
-
-    .carte-reglage-mobile strong { font-size: 14px; }
-    .carte-reglage-mobile span { font-size: 11px; opacity: .78; font-weight: 400; }
-
-    #navigation-mobile-admin {
-        z-index: 1100;
-    }
-
-    #fiche-participant {
-        z-index: 1300;
-    }
-
-    #fond-popup {
-        z-index: 1200;
-    }
-}
-
-
-/* ========================================
-   V2.1 — TABLEAU DE BORD MOBILE RÉORGANISÉ
-   ======================================== */
-
-.raccourcis-reglages {
-    margin: 22px 0;
-}
-
-.grille-raccourcis-reglages {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-}
-
-.raccourci-reglage {
-    min-height: 92px;
-    margin: 0;
-    padding: 12px 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    text-align: center;
-    border-radius: 14px;
-}
-
-.raccourci-icone {
+.confidentialite-modal h1 {
+    margin-top: 0;
+    margin-bottom: 18px;
     font-size: 24px;
 }
 
-.profil-non-examine {
-    border-width: 2px !important;
+.confidentialite-modal p {
+    line-height: 1.55;
 }
 
-.marqueurs-profil-mobile {
-    font-size: 11px;
+.confidentialite-modal a {
+    overflow-wrap: anywhere;
+}
+
+.confidentialite-details {
+    margin: 18px 0;
+    padding: 12px 14px;
+    border: 1px solid #e5e5ee;
+    border-radius: 12px;
+    background: #f8f8fb;
+}
+
+.confidentialite-details summary {
+    cursor: pointer;
     font-weight: 700;
 }
 
-@media (max-width: 750px) {
-    .navigation-mobile-admin {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    #section-mon-questionnaire {
-        margin-top: 8px;
-    }
-
-    #section-mon-questionnaire #zone-qr {
-        margin-top: 14px;
-    }
-
-    .grille-raccourcis-reglages {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .raccourci-reglage {
-        min-height: 86px;
-    }
-
-    #section-resultats {
-        margin-top: 14px;
-    }
+.confidentialite-details-contenu {
+    padding-top: 8px;
+    font-size: 14px;
 }
 
-
-/* V2.1 mobile — la recherche dédiée Profils remplace les anciens contrôles du classement */
-@media (max-width: 750px) {
-    #section-resultats .recherche-participants,
-    #section-resultats #tri-date-resultats {
-        display: none !important;
-    }
-}
-
-
-/* V2.1 mobile — contrôles de classement inutiles sur l'accueil GSM.
-   La recherche se fait dans l'onglet Profils. */
-@media (max-width: 750px) {
-    #section-resultats .recherche-participants,
-    #section-resultats #tri-date-resultats,
-    #section-resultats #filtres-nombre {
-        display: none !important;
-    }
-}
-
-
-/* V2.1 mobile — les fiches sont consultées via l'onglet Profils.
-   Sur l'accueil, seule la zone de comparaison reste visible. */
-@media (max-width: 750px) {
-    #section-resultats #liste-resultats {
-        display: none !important;
-    }
-}
-
-
-/* V2.1 mobile — le choix de catégorie servait au classement désormais masqué. */
-@media (max-width: 750px) {
-    #section-resultats #filtres-categorie {
-        display: none !important;
-    }
-}
-
-
-/* V2.1 — QR enregistrable par simple appui */
-#qr-code {
+.confidentialite-consentement {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 20px 0 0;
+    padding: 15px;
+    border: 1px solid #d9d9e5;
+    border-radius: 12px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.45;
 }
 
-.aide-qr-mobile {
-    display: none;
+.confidentialite-consentement input {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    margin: 1px 0 0;
+    padding: 0;
 }
 
-@media (max-width: 750px) {
-    .aide-qr-mobile {
-        display: block;
-        margin-top: 6px !important;
-        font-size: 11px;
-        opacity: .62;
+@media (max-width: 600px) {
+    .confidentialite-overlay {
+        padding: 12px;
+        align-items: flex-end;
     }
 
-    #qr-code {
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
+    .confidentialite-modal {
+        width: 100%;
+        max-height: calc(100vh - 24px);
+        padding: 20px;
+        border-radius: 18px 18px 12px 12px;
+    }
+
+    .confidentialite-modal h1 {
+        font-size: 22px;
     }
 }

@@ -42,51 +42,7 @@ let utilisateur = {};
 
 let envoiEnCours = false;
 
-const DELAI_ANTI_DOUBLON_LOCAL = 10 * 60 * 1000;
-
-function cleSoumissionLocale() {
-    return "justbetweenus_soumission_" + QUESTIONNAIRE_TOKEN;
-}
-
-function soumissionRecente() {
-    if (!QUESTIONNAIRE_TOKEN) return false;
-
-    try {
-        const valeur = localStorage.getItem(cleSoumissionLocale());
-        if (!valeur) return false;
-
-        const dateSoumission = Number(valeur);
-        if (!Number.isFinite(dateSoumission)) {
-            localStorage.removeItem(cleSoumissionLocale());
-            return false;
-        }
-
-        const recente =
-            Date.now() - dateSoumission < DELAI_ANTI_DOUBLON_LOCAL;
-
-        if (!recente) {
-            localStorage.removeItem(cleSoumissionLocale());
-        }
-
-        return recente;
-    } catch (error) {
-        console.warn("Stockage local indisponible :", error);
-        return false;
-    }
-}
-
-function memoriserSoumission() {
-    if (!QUESTIONNAIRE_TOKEN) return;
-
-    try {
-        localStorage.setItem(
-            cleSoumissionLocale(),
-            String(Date.now())
-        );
-    } catch (error) {
-        console.warn("Impossible de mémoriser la soumission :", error);
-    }
-}
+let consentementDonne = false;
 
 
 // ========================================
@@ -128,6 +84,16 @@ const formulaireIdentification =
         "formulaire-identification"
     );
 
+const confidentialiteModal =
+    document.getElementById(
+        "confidentialite-modal"
+    );
+
+const accordConfidentialite =
+    document.getElementById(
+        "accord-confidentialite"
+    );
+
 const numeroQuestion =
     document.getElementById(
         "numero-question"
@@ -137,12 +103,6 @@ const texteQuestion =
     document.getElementById(
         "texte-question"
     );
-
-const barreProgressionQuestionnaire =
-    document.getElementById("barre-progression-questionnaire");
-
-const pourcentageProgression =
-    document.getElementById("pourcentage-progression");
 
 const boutonsReponse =
     document.querySelectorAll(
@@ -306,11 +266,11 @@ async function initialiserQuestionnaire() {
         return;
     }
 
-    const [configurationOk, questionsOk] =
-        await Promise.all([
-            chargerConfiguration(),
-            chargerQuestions()
-        ]);
+    const configurationOk =
+        await chargerConfiguration();
+
+    const questionsOk =
+        await chargerQuestions();
 
     if (!configurationOk || !questionsOk) {
         afficherLienInvalide();
@@ -318,19 +278,16 @@ async function initialiserQuestionnaire() {
     }
 
 
-    if (soumissionRecente()) {
-        accueil.classList.add("cache");
-        identification.classList.add("cache");
-        questionnaire.classList.add("cache");
-        questionnaireFinTitre.textContent = "Merci 😊";
-        questionnaireFinMessage.textContent =
-            "Ce questionnaire a déjà été envoyé récemment depuis cet appareil.";
-        finQuestionnaire.classList.remove("cache");
-        return;
-    }
-
     accueil.classList.remove(
         "cache"
+    );
+
+    confidentialiteModal.classList.remove(
+        "cache"
+    );
+
+    document.body.classList.add(
+        "confidentialite-bloquee"
     );
 
 }
@@ -340,12 +297,44 @@ initialiserQuestionnaire();
 
 
 // ========================================
+// CONSENTEMENT CONFIDENTIALITÉ
+// ========================================
+
+accordConfidentialite.addEventListener(
+    "change",
+    function () {
+
+        if (!accordConfidentialite.checked) {
+            return;
+        }
+
+        consentementDonne = true;
+
+        confidentialiteModal.classList.add(
+            "cache"
+        );
+
+        document.body.classList.remove(
+            "confidentialite-bloquee"
+        );
+
+    }
+);
+
+
+// ========================================
 // COMMENCER
 // ========================================
 
 boutonCommencer.addEventListener(
     "click",
     function () {
+
+        if (!consentementDonne) {
+            confidentialiteModal.classList.remove("cache");
+            document.body.classList.add("confidentialite-bloquee");
+            return;
+        }
 
         accueil.classList.add(
             "cache"
@@ -368,6 +357,12 @@ formulaireIdentification.addEventListener(
     function (event) {
 
         event.preventDefault();
+
+        if (!consentementDonne) {
+            confidentialiteModal.classList.remove("cache");
+            document.body.classList.add("confidentialite-bloquee");
+            return;
+        }
 
 
         utilisateur = {
@@ -472,17 +467,6 @@ function afficherQuestion() {
         questions.length;
 
 
-    const progression =
-        Math.round(
-            ((questionActuelle + 1) / questions.length) * 100
-        );
-
-    barreProgressionQuestionnaire.style.width =
-        progression + "%";
-
-    pourcentageProgression.textContent =
-        progression + " %";
-
     texteQuestion.textContent =
         question.text;
 
@@ -520,8 +504,6 @@ boutonsReponse.forEach(
                 }
 
 
-                bouton.disabled = true;
-
                 reponsesUtilisateur.push({
 
                     question_id:
@@ -535,13 +517,8 @@ boutonsReponse.forEach(
 
                 questionActuelle++;
 
-                afficherQuestion();
 
-                // Le changement de question est synchrone : on peut
-                // réactiver immédiatement les boutons pour la suivante.
-                boutonsReponse.forEach(function (element) {
-                    element.disabled = false;
-                });
+                afficherQuestion();
 
             }
         );
@@ -560,6 +537,14 @@ async function terminerQuestionnaire() {
 
         return;
 
+    }
+
+    if (!consentementDonne) {
+        questionnaire.classList.add("cache");
+        accueil.classList.remove("cache");
+        confidentialiteModal.classList.remove("cache");
+        document.body.classList.add("confidentialite-bloquee");
+        return;
     }
 
 
@@ -659,8 +644,6 @@ async function terminerQuestionnaire() {
 
     }
 
-
-    memoriserSoumission();
 
     questionnaire.classList.add(
         "cache"
