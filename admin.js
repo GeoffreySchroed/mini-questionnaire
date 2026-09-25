@@ -414,6 +414,7 @@ async function chargerProfil() {
             "Rôle : Super Administrateur";
 
         sectionAdministrateurs.classList.remove("cache");
+        raccourciAdministrateurs?.classList.remove("cache");
 
         await chargerAdministrateurs();
 
@@ -423,6 +424,7 @@ async function chargerProfil() {
             "Rôle : Administrateur";
 
         sectionAdministrateurs.classList.add("cache");
+        raccourciAdministrateurs?.classList.add("cache");
     }
 
 
@@ -1711,12 +1713,193 @@ function mettreAJourStatistiquesResultats(resultats) {
     statMoyenneCouple.textContent = moyenne("pourcentage_couple");
 
     const participants = liste.map(r => r.participants).filter(Boolean);
-    statAContacter.textContent = participants.filter(p => (p.statut || "a_contacter") === "a_contacter").length;
+    const nombreAContacter = participants.filter(p => (p.statut || "a_contacter") === "a_contacter").length;
+    statAContacter.textContent = nombreAContacter;
     statFavoris.textContent = participants.filter(p => p.favori === true).length;
     statContactes.textContent = participants.filter(p => p.statut === "contacte").length;
     statEcartes.textContent = participants.filter(p => p.statut === "ecarte").length;
 }
 
+
+// ========================================
+// INTERFACE MOBILE V2.1 — TABLEAU DE BORD
+// ========================================
+
+const navigationMobileAdmin = document.getElementById("navigation-mobile-admin");
+const boutonsNavigationMobile = document.querySelectorAll(".nav-mobile-bouton");
+const badgeNouveauxProfils = document.getElementById("badge-nouveaux-profils");
+const ecranMobileProfils = document.getElementById("ecran-mobile-profils");
+const ecranMobileFavoris = document.getElementById("ecran-mobile-favoris");
+const listeProfilsMobile = document.getElementById("liste-profils-mobile");
+const listeFavorisMobile = document.getElementById("liste-favoris-mobile");
+const rechercheProfilsMobile = document.getElementById("recherche-profils-mobile");
+const raccourciAdministrateurs = document.getElementById("raccourci-administrateurs");
+
+function estInterfaceMobile() {
+    return window.matchMedia("(max-width: 750px)").matches;
+}
+
+function fermerEcransMobile() {
+    [ecranMobileProfils, ecranMobileFavoris].forEach(function (ecran) {
+        if (ecran) ecran.classList.add("cache");
+    });
+}
+
+function activerBoutonNavigationMobile(cible) {
+    boutonsNavigationMobile.forEach(function (bouton) {
+        bouton.classList.toggle("actif", bouton.dataset.cible === cible);
+    });
+}
+
+function nomParticipantMobile(resultat) {
+    const p = resultat?.participants || {};
+    return ((p.prenom || "") + " " + (p.nom || "")).trim() || "Participant";
+}
+
+function statutParticipantMobile(participant) {
+    const statut = participant?.statut || "a_contacter";
+    if (statut === "contacte") return "Contacté";
+    if (statut === "ecarte") return "Écarté";
+    return "À contacter";
+}
+
+function mettreAJourBadgeNouveauxProfils() {
+    if (!badgeNouveauxProfils) return;
+    const nombre = (derniersResultatsComplets || []).filter(function (r) {
+        return r.participants && r.participants.examine !== true;
+    }).length;
+    badgeNouveauxProfils.textContent = nombre > 99 ? "99+" : String(nombre);
+    badgeNouveauxProfils.classList.toggle("cache", nombre === 0);
+}
+
+function creerCarteProfilMobile(resultat) {
+    const participant = resultat?.participants || {};
+    const carte = document.createElement("button");
+    carte.type = "button";
+    carte.className = "carte-profil-mobile";
+    if (participant.examine !== true) carte.classList.add("profil-non-examine");
+
+    const ligneNom = document.createElement("div");
+    ligneNom.className = "carte-profil-mobile-entete";
+
+    const nom = document.createElement("strong");
+    nom.textContent = nomParticipantMobile(resultat);
+
+    const marqueurs = document.createElement("span");
+    marqueurs.className = "marqueurs-profil-mobile";
+    marqueurs.textContent =
+        (participant.examine !== true ? "Nouveau " : "") +
+        (participant.favori ? "★" : "");
+
+    ligneNom.append(nom, marqueurs);
+
+    const meta = document.createElement("div");
+    meta.className = "carte-profil-mobile-meta";
+    meta.textContent = (participant.age ? participant.age + " ans · " : "") + statutParticipantMobile(participant);
+
+    const scores = document.createElement("div");
+    scores.className = "mini-scores-mobile";
+    scores.innerHTML =
+        "<span>👥 " + Math.round(Number(resultat.pourcentage_amis) || 0) + "%</span>" +
+        "<span>🌙 " + Math.round(Number(resultat.pourcentage_un_soir) || 0) + "%</span>" +
+        "<span>❤️ " + Math.round(Number(resultat.pourcentage_couple) || 0) + "%</span>";
+
+    carte.append(ligneNom, meta, scores);
+
+    carte.addEventListener("click", function () {
+        const carteExistante = Array.from(
+            document.querySelectorAll("#liste-resultats .ouvrir-participant")
+        ).find(function (element) {
+            return element.dataset.participantId === resultat.participant_id;
+        });
+
+        if (carteExistante) carteExistante.click();
+    });
+
+    return carte;
+}
+
+function remplirListeProfilsMobile(favorisSeulement = false) {
+    const destination = favorisSeulement ? listeFavorisMobile : listeProfilsMobile;
+    if (!destination) return;
+
+    const recherche = !favorisSeulement && rechercheProfilsMobile
+        ? rechercheProfilsMobile.value.trim().toLowerCase()
+        : "";
+
+    let resultats = Array.isArray(derniersResultatsComplets) ? [...derniersResultatsComplets] : [];
+
+    if (favorisSeulement) {
+        resultats = resultats.filter(r => r.participants?.favori === true);
+    }
+
+    if (recherche) {
+        resultats = resultats.filter(function (r) {
+            const p = r.participants || {};
+            return [p.prenom, p.nom, p.age].filter(v => v !== null && v !== undefined)
+                .join(" ").toLowerCase().includes(recherche);
+        });
+    }
+
+    resultats.sort(function (a, b) {
+        const da = new Date(a.date_creation || a.participants?.date_creation || 0).getTime();
+        const db = new Date(b.date_creation || b.participants?.date_creation || 0).getTime();
+        return db - da;
+    });
+
+    destination.replaceChildren();
+
+    if (!resultats.length) {
+        const vide = document.createElement("div");
+        vide.className = "etat-vide-mobile";
+        vide.textContent = favorisSeulement ? "Aucun profil favori pour le moment." : "Aucun profil trouvé.";
+        destination.appendChild(vide);
+        return;
+    }
+
+    resultats.forEach(function (resultat) {
+        destination.appendChild(creerCarteProfilMobile(resultat));
+    });
+}
+
+function allerSectionMobile(cible) {
+    if (!estInterfaceMobile()) return;
+    fermerEcransMobile();
+
+    if (cible === "accueil") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (cible === "profils") {
+        remplirListeProfilsMobile(false);
+        ecranMobileProfils?.classList.remove("cache");
+        ecranMobileProfils?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (cible === "favoris") {
+        remplirListeProfilsMobile(true);
+        ecranMobileFavoris?.classList.remove("cache");
+        ecranMobileFavoris?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    activerBoutonNavigationMobile(cible);
+}
+
+boutonsNavigationMobile.forEach(function (bouton) {
+    bouton.addEventListener("click", function () {
+        allerSectionMobile(bouton.dataset.cible);
+    });
+});
+
+rechercheProfilsMobile?.addEventListener("input", function () {
+    remplirListeProfilsMobile(false);
+});
+
+document.querySelectorAll(".raccourci-reglage").forEach(function (bouton) {
+    bouton.addEventListener("click", function () {
+        const cible = document.getElementById(bouton.dataset.cibleReglage);
+        if (!cible) return;
+        const details = cible.tagName === "DETAILS" ? cible : cible.querySelector("details");
+        if (details) details.open = true;
+        cible.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+});
 
 // ========================================
 // ANALYSE / COMPARAISON V2.0
@@ -1851,12 +2034,14 @@ async function chargerResultats() {
             pourcentage_couple,
             date_creation,
             participants (
+                id,
                 prenom,
                 nom,
                 age,
                 date_creation,
                 favori,
-                statut
+                statut,
+                examine
             )
         `)
         .order(
@@ -1882,6 +2067,7 @@ async function chargerResultats() {
     mettreAJourStatistiquesResultats(resultats);
     derniersResultatsComplets = resultats || [];
     remplirSelecteursComparaison(derniersResultatsComplets);
+    mettreAJourBadgeNouveauxProfils();
 
 
     if (!resultats || resultats.length === 0) {
@@ -2167,7 +2353,7 @@ listeResultats.addEventListener(
         } = await supabaseClient
             .from("participants")
             .select(
-                "id, prenom, nom, age, gsm, reseau, date_creation, favori, statut, note_privee"
+                "id, prenom, nom, age, gsm, reseau, date_creation, favori, statut, note_privee, examine"
             )
             .eq(
                 "id",
@@ -2183,6 +2369,29 @@ listeResultats.addEventListener(
             );
 
             return;
+        }
+
+        // Une participation devient "examinée" dès que sa fiche est ouverte.
+        if (participant.examine !== true) {
+            const { error: erreurExamen } = await supabaseClient
+                .from("participants")
+                .update({ examine: true })
+                .eq("id", participantId);
+
+            if (!erreurExamen) {
+                participant.examine = true;
+                const resultatLocal = derniersResultatsComplets.find(
+                    r => r.participant_id === participantId
+                );
+                if (resultatLocal?.participants) {
+                    resultatLocal.participants.examine = true;
+                }
+                mettreAJourBadgeNouveauxProfils();
+                remplirListeProfilsMobile(false);
+                remplirListeProfilsMobile(true);
+            } else {
+                console.error("Impossible de marquer le profil comme examiné :", erreurExamen.message);
+            }
         }
 
 

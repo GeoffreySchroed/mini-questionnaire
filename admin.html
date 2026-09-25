@@ -1,780 +1,484 @@
 <!DOCTYPE html>
+
 <html lang="fr">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Administration - Questionnaire</title>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Administration - Questionnaire</title>
+<link href="style.css" rel="stylesheet"/>
 </head>
-
-
 <body>
-
-    <div class="container container-admin">
-
-
-        <!-- CONNEXION -->
-
-        <div id="connexion-admin">
-
-            <h1>Administration</h1>
-
-            <p>
+<div class="container container-admin">
+<!-- CONNEXION -->
+<div id="connexion-admin">
+<h1>Administration</h1>
+<p>
                 Connecte-toi pour gérer ton questionnaire.
             </p>
-
-
-            <form id="formulaire-connexion">
-
-                <label for="email">
+<form id="formulaire-connexion">
+<label for="email">
                     Adresse e-mail
                 </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    autocomplete="email"
-                    required
-                >
-
-
-                <label for="mot-de-passe">
+<input autocomplete="email" id="email" required="" type="email"/>
+<label for="mot-de-passe">
                     Mot de passe
                 </label>
-
-                <input
-                    type="password"
-                    id="mot-de-passe"
-                    autocomplete="current-password"
-                    required
-                >
-
-
-                <button type="submit">
+<input autocomplete="current-password" id="mot-de-passe" required="" type="password"/>
+<button type="submit">
                     Se connecter
                 </button>
-
-                <button id="mot-de-passe-oublie" type="button" class="bouton-lien">
+<button class="bouton-lien" id="mot-de-passe-oublie" type="button">
                     Mot de passe oublié ?
                 </button>
-
-            </form>
-
-        </div>
-
-        <div id="reinitialisation-mot-de-passe" class="cache">
-            <h1>Nouveau mot de passe</h1>
-            <p>Choisis un nouveau mot de passe pour ton compte.</p>
-            <form id="formulaire-reinitialisation">
-                <label for="nouveau-mot-de-passe-reset">Nouveau mot de passe</label>
-                <input type="password" id="nouveau-mot-de-passe-reset" minlength="8" autocomplete="new-password" required>
-                <label for="confirmation-mot-de-passe-reset">Confirmer le mot de passe</label>
-                <input type="password" id="confirmation-mot-de-passe-reset" minlength="8" autocomplete="new-password" required>
-                <button type="submit">Enregistrer le nouveau mot de passe</button>
-            </form>
-        </div>
-
-
-
-        <!-- TABLEAU DE BORD -->
-
-        <div
-            id="tableau-de-bord"
-            class="cache"
-        >
-
-            <div class="entete-admin">
-
-                <div>
-
-                    <h1 id="bienvenue-admin">
+</form>
+</div>
+<div class="cache" id="reinitialisation-mot-de-passe">
+<h1>Nouveau mot de passe</h1>
+<p>Choisis un nouveau mot de passe pour ton compte.</p>
+<form id="formulaire-reinitialisation">
+<label for="nouveau-mot-de-passe-reset">Nouveau mot de passe</label>
+<input autocomplete="new-password" id="nouveau-mot-de-passe-reset" minlength="8" required="" type="password"/>
+<label for="confirmation-mot-de-passe-reset">Confirmer le mot de passe</label>
+<input autocomplete="new-password" id="confirmation-mot-de-passe-reset" minlength="8" required="" type="password"/>
+<button type="submit">Enregistrer le nouveau mot de passe</button>
+</form>
+</div>
+<!-- TABLEAU DE BORD -->
+<div class="cache" id="tableau-de-bord">
+<div class="entete-admin">
+<div>
+<h1 id="bienvenue-admin">
                         Bienvenue 👋
                     </h1>
-
-                    <p id="role-admin">
+<p id="role-admin">
                         Rôle :
                     </p>
-
-                </div>
-
-
-                <button
-                    id="deconnexion"
-                    type="button"
-                >
+</div>
+<button id="deconnexion" type="button">
                     Se déconnecter
                 </button>
-
-            </div>
-
-
-
-            <!-- MON QUESTIONNAIRE -->
-
-            <div id="section-mon-questionnaire">
-
-                <h2>
+</div>
+<!-- MON QUESTIONNAIRE -->
+<div id="section-mon-questionnaire">
+<h2>
                     Mon questionnaire
                 </h2>
-
-                <p>
+<p>
                     Partage ce lien ou le QR code
                     pour donner accès à ton questionnaire.
                 </p>
-
-
-                <label for="lien-questionnaire">
+<label for="lien-questionnaire">
                     Lien public
                 </label>
-
-
-                <div class="ligne-lien">
-
-                    <input
-                        type="text"
-                        id="lien-questionnaire"
-                        readonly
-                    >
-
-
-                    <button
-                        id="copier-lien-questionnaire"
-                        type="button"
-                    >
+<div class="ligne-lien">
+<input id="lien-questionnaire" readonly="" type="text"/>
+<button id="copier-lien-questionnaire" type="button">
                         Copier
                     </button>
-
-                    <button
-                        id="regenerer-lien-questionnaire"
-                        type="button"
-                        class="bouton-secondaire"
-                    >
+<button class="bouton-secondaire" id="regenerer-lien-questionnaire" type="button">
                         Nouveau lien
                     </button>
+</div>
 
-                </div>
-
-
-                <details id="personnalisation-questionnaire" class="panneau-repliable panneau-repliable-interne">
-                    <summary>
-                        <span><strong>Personnalisation</strong><small>Personnalise les textes affichés aux participants.</small></span>
-                        <span class="indicateur-repli" aria-hidden="true">⌄</span>
-                    </summary>
-                    <div class="contenu-panneau-repliable">
-
-                    <form id="formulaire-personnalisation">
-
-                        <label for="personnalisation-titre">Titre d'accueil</label>
-                        <input type="text" id="personnalisation-titre" maxlength="100" required>
-
-                        <label for="personnalisation-accueil">Texte d'accueil</label>
-                        <textarea id="personnalisation-accueil" maxlength="500" required></textarea>
-
-                        <label for="personnalisation-bouton">Texte du bouton</label>
-                        <input type="text" id="personnalisation-bouton" maxlength="50" required>
-
-                        <label for="personnalisation-fin-titre">Titre de fin</label>
-                        <input type="text" id="personnalisation-fin-titre" maxlength="100" required>
-
-                        <label for="personnalisation-fin-message">Message de fin</label>
-                        <textarea id="personnalisation-fin-message" maxlength="500" required></textarea>
-
-                        <button type="submit" id="enregistrer-personnalisation">
-                            Enregistrer la personnalisation
-                        </button>
-
-                    </form>
-
-                    </div>
-                </details>
-
-
-                <div id="zone-qr">
-
-                    <div id="qr-code">
-                    </div>
-
-                    <p>
+<div id="zone-qr">
+<div id="qr-code">
+</div>
+<p>
                         Scanne ce QR code avec un téléphone
                         pour ouvrir le questionnaire.
                     </p>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- ADMINISTRATEURS -->
-
-            <div
-                id="section-administrateurs"
-                class="cache section-repliable-wrapper"
-            >
-                <details id="panneau-administrateurs" class="panneau-repliable">
-                    <summary>
-                        <span><strong>Administrateurs</strong><small>Gère les administrateurs invités de l'application.</small></span>
-                        <span class="indicateur-repli" aria-hidden="true">⌄</span>
-                    </summary>
-                    <div class="contenu-panneau-repliable">
-
-                <div id="liste-administrateurs">
-
-                    <p>
+</div>
+</div><div class="raccourcis-reglages" id="raccourcis-reglages">
+<h2>Réglages</h2>
+<div class="grille-raccourcis-reglages">
+<button class="raccourci-reglage" data-cible-reglage="section-personnalisation" type="button">
+<span class="raccourci-icone">🎨</span><strong>Personnalisation</strong>
+</button>
+<button class="raccourci-reglage" data-cible-reglage="section-questions" type="button">
+<span class="raccourci-icone">❓</span><strong>Questions</strong>
+</button>
+<button class="raccourci-reglage" data-cible-reglage="section-administrateurs" id="raccourci-administrateurs" type="button">
+<span class="raccourci-icone">👥</span><strong>Administrateurs</strong>
+</button>
+<button class="raccourci-reglage" data-cible-reglage="section-compte" type="button">
+<span class="raccourci-icone">🔐</span><strong>Mon compte</strong>
+</button>
+</div>
+</div><div id="section-resultats">
+<h2>Résultats</h2>
+<p>
+                    Résultats des personnes ayant terminé le questionnaire.
+                </p>
+<!-- TABLEAU DE BORD RÉSULTATS -->
+<div aria-label="Statistiques des résultats" id="statistiques-resultats">
+<div class="carte-statistique">
+<span class="stat-icone">👥</span>
+<strong id="stat-total">0</strong>
+<span>Participations</span>
+</div>
+<div class="carte-statistique">
+<span class="stat-icone">🆕</span>
+<strong id="stat-semaine">0</strong>
+<span>Cette semaine</span>
+</div>
+<div class="carte-statistique">
+<span class="stat-icone">🤝</span>
+<strong id="stat-moyenne-amis">—</strong>
+<span>Moyenne Amis</span>
+</div>
+<div class="carte-statistique">
+<span class="stat-icone">🌙</span>
+<strong id="stat-moyenne-un-soir">—</strong>
+<span>Moyenne Un soir</span>
+</div>
+<div class="carte-statistique">
+<span class="stat-icone">❤️</span>
+<strong id="stat-moyenne-couple">—</strong>
+<span>Moyenne Couple</span>
+</div>
+<div class="carte-statistique"><span class="stat-icone">📞</span><strong id="stat-a-contacter">0</strong><span>À contacter</span></div>
+<div class="carte-statistique"><span class="stat-icone">⭐</span><strong id="stat-favoris">0</strong><span>Favoris</span></div>
+<div class="carte-statistique"><span class="stat-icone">✅</span><strong id="stat-contactes">0</strong><span>Contactés</span></div>
+<div class="carte-statistique"><span class="stat-icone">⛔</span><strong id="stat-ecartes">0</strong><span>Écartés</span></div>
+</div>
+<div aria-label="Filtres de suivi" id="filtres-suivi">
+<button class="actif" data-suivi="tous" type="button">Tous</button>
+<button data-suivi="favoris" type="button">⭐ Favoris</button>
+<button data-suivi="a_contacter" type="button">À contacter</button>
+<button data-suivi="contacte" type="button">Contactés</button>
+<button data-suivi="ecarte" type="button">Écartés</button>
+</div>
+<div id="filtres-categorie">
+<button id="classement-amis" type="button">
+                        👥 Amis
+                    </button>
+<button id="classement-un-soir" type="button">
+                        🌙 Un soir
+                    </button>
+<button id="classement-couple" type="button">
+                        ❤️ Couple
+                    </button>
+</div>
+<div class="recherche-participants">
+<label for="recherche-participant">
+                        Rechercher un participant
+                    </label>
+<input autocomplete="off" id="recherche-participant" placeholder="Prénom, nom ou âge..." type="search"/>
+</div>
+<div id="tri-date-resultats">
+<label for="tri-date">Ordre d'affichage</label>
+<select id="tri-date">
+<option value="classement">Classement</option>
+<option value="recent">Plus récents</option>
+<option value="ancien">Plus anciens</option>
+</select>
+</div>
+<div id="filtres-nombre">
+<button id="afficher-top-5" type="button">
+                        Top 5
+                    </button>
+<button id="afficher-top-10" type="button">
+                        Top 10
+                    </button>
+<button id="afficher-tous" type="button">
+                        Tous
+                    </button>
+</div>
+<div class="zone-danger-resultats">
+<button class="bouton-danger" id="supprimer-tous-resultats" type="button">
+                        🧹 Supprimer tous mes résultats
+                    </button>
+<p>Supprime définitivement tous tes participants, réponses et résultats. Les questions ne sont pas supprimées.</p>
+</div>
+<div class="comparaison-profils" id="comparaison-profils">
+<h3>Comparer deux profils</h3>
+<div class="comparaison-controles">
+<select id="comparaison-profil-a"><option value="">Profil A</option></select>
+<select id="comparaison-profil-b"><option value="">Profil B</option></select>
+<button id="bouton-comparer-profils" type="button">Comparer</button>
+</div>
+<div class="comparaison-resultat cache" id="comparaison-resultat"></div>
+</div>
+<div id="liste-resultats">
+<p>
+                        Aucun résultat chargé.
+                    </p>
+</div>
+</div><div class="section-repliable-wrapper" id="section-personnalisation"><details class="panneau-repliable" id="panneau-personnalisation">
+<summary>
+<span><strong>Personnalisation</strong><small>Personnalise les textes affichés aux participants.</small></span>
+<span aria-hidden="true" class="indicateur-repli">⌄</span>
+</summary>
+<div class="contenu-panneau-repliable">
+<form id="formulaire-personnalisation">
+<label for="personnalisation-titre">Titre d'accueil</label>
+<input id="personnalisation-titre" maxlength="100" required="" type="text"/>
+<label for="personnalisation-accueil">Texte d'accueil</label>
+<textarea id="personnalisation-accueil" maxlength="500" required=""></textarea>
+<label for="personnalisation-bouton">Texte du bouton</label>
+<input id="personnalisation-bouton" maxlength="50" required="" type="text"/>
+<label for="personnalisation-fin-titre">Titre de fin</label>
+<input id="personnalisation-fin-titre" maxlength="100" required="" type="text"/>
+<label for="personnalisation-fin-message">Message de fin</label>
+<textarea id="personnalisation-fin-message" maxlength="500" required=""></textarea>
+<button id="enregistrer-personnalisation" type="submit">
+                            Enregistrer la personnalisation
+                        </button>
+</form>
+</div>
+</details></div><div id="section-questions">
+<details id="panneau-questions">
+<summary>
+<span>
+<strong>Questions</strong>
+<small>Gérer les questions et leurs points</small>
+</span>
+<span aria-hidden="true" class="indicateur-repli">⌄</span>
+</summary>
+<div class="contenu-panneau-questions">
+<h2>Questions</h2>
+<p>
+                    Gère les questions et les points attribués à chaque réponse.
+                </p>
+<div id="liste-questions">
+<p>
+                        Aucune question chargée.
+                    </p>
+</div>
+<button id="ajouter-question" type="button">
+                    + Ajouter une question
+                </button>
+<div class="cache" id="formulaire-question">
+<h2>
+                        Nouvelle question
+                    </h2>
+<label for="nouvelle-question">
+                        Question
+                    </label>
+<input id="nouvelle-question" placeholder="Écris ta question..." type="text"/>
+<h3>Points</h3>
+<p>
+                        Définis les points attribués à chaque réponse.
+                    </p>
+<div class="table-responsive">
+<table class="table-points">
+<thead>
+<tr>
+<th>Réponse</th>
+<th>👥 Amis</th>
+<th>🌙 Un soir</th>
+<th>❤️ Couple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oui</td>
+<td><input id="oui-amis" type="number" value="0"/></td>
+<td><input id="oui-un-soir" type="number" value="0"/></td>
+<td><input id="oui-couple" type="number" value="0"/></td>
+</tr>
+<tr>
+<td>Non</td>
+<td><input id="non-amis" type="number" value="0"/></td>
+<td><input id="non-un-soir" type="number" value="0"/></td>
+<td><input id="non-couple" type="number" value="0"/></td>
+</tr>
+<tr>
+<td>Peut-être</td>
+<td><input id="peut-etre-amis" type="number" value="0"/></td>
+<td><input id="peut-etre-un-soir" type="number" value="0"/></td>
+<td><input id="peut-etre-couple" type="number" value="0"/></td>
+</tr>
+<tr>
+<td>Pas du tout</td>
+<td><input id="pas-du-tout-amis" type="number" value="0"/></td>
+<td><input id="pas-du-tout-un-soir" type="number" value="0"/></td>
+<td><input id="pas-du-tout-couple" type="number" value="0"/></td>
+</tr>
+<tr>
+<td>Je ne sais pas</td>
+<td><input id="je-ne-sais-pas-amis" type="number" value="0"/></td>
+<td><input id="je-ne-sais-pas-un-soir" type="number" value="0"/></td>
+<td><input id="je-ne-sais-pas-couple" type="number" value="0"/></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="actions-formulaire">
+<button id="enregistrer-question" type="button">
+                            Enregistrer
+                        </button>
+<button class="bouton-secondaire" id="annuler-question" type="button">
+                            Annuler
+                        </button>
+</div>
+</div>
+</div>
+</details>
+</div><div class="cache section-repliable-wrapper" id="section-administrateurs">
+<details class="panneau-repliable" id="panneau-administrateurs">
+<summary>
+<span><strong>Administrateurs</strong><small>Gère les administrateurs invités de l'application.</small></span>
+<span aria-hidden="true" class="indicateur-repli">⌄</span>
+</summary>
+<div class="contenu-panneau-repliable">
+<div id="liste-administrateurs">
+<p>
                         Aucun administrateur chargé.
                     </p>
-
-                </div>
-
-
-                <button
-                    id="ajouter-administrateur"
-                    type="button"
-                >
+</div>
+<button id="ajouter-administrateur" type="button">
                     + Ajouter un administrateur
                 </button>
-
-
-                <div
-                    id="formulaire-administrateur"
-                    class="cache"
-                >
-
-                    <h3>
+<div class="cache" id="formulaire-administrateur">
+<h3>
                         Ajouter un administrateur
                     </h3>
-
-
-                    <p class="info-admin">
+<p class="info-admin">
                         Crée ici un compte administrateur invité.
                         Son accès et son questionnaire seront séparés des tiens.
                     </p>
-
-
-                    <label for="admin-nom">
+<label for="admin-nom">
                         Nom
                     </label>
-
-                    <input
-                        type="text"
-                        id="admin-nom"
-                        placeholder="Nom de l'administrateur"
-                    >
-
-
-                    <label for="admin-email">
+<input id="admin-nom" placeholder="Nom de l'administrateur" type="text"/>
+<label for="admin-email">
                         Adresse e-mail
                     </label>
-
-                    <input
-                        type="email"
-                        id="admin-email"
-                        placeholder="admin@exemple.com"
-                        autocomplete="off"
-                    >
-
-
-                    <label for="admin-mot-de-passe">
+<input autocomplete="off" id="admin-email" placeholder="admin@exemple.com" type="email"/>
+<label for="admin-mot-de-passe">
                         Mot de passe temporaire
                     </label>
-
-                    <input
-                        type="password"
-                        id="admin-mot-de-passe"
-                        placeholder="Minimum 8 caractères"
-                        minlength="8"
-                        autocomplete="new-password"
-                    >
-
-
-                    <div class="actions-formulaire">
-
-                        <button
-                            id="enregistrer-administrateur"
-                            type="button"
-                        >
+<input autocomplete="new-password" id="admin-mot-de-passe" minlength="8" placeholder="Minimum 8 caractères" type="password"/>
+<div class="actions-formulaire">
+<button id="enregistrer-administrateur" type="button">
                             Enregistrer
                         </button>
-
-
-                        <button
-                            id="annuler-administrateur"
-                            type="button"
-                            class="bouton-secondaire"
-                        >
+<button class="bouton-secondaire" id="annuler-administrateur" type="button">
                             Annuler
                         </button>
-
-                    </div>
-
-                </div>
-
-                    </div>
-                </details>
-            </div>
-
-
-
-            <!-- QUESTIONS -->
-
-            <div id="section-questions">
-
-                <details id="panneau-questions">
-                    <summary>
-                        <span>
-                            <strong>Questions</strong>
-                            <small>Gérer les questions et leurs points</small>
-                        </span>
-                        <span class="indicateur-repli" aria-hidden="true">⌄</span>
-                    </summary>
-
-                    <div class="contenu-panneau-questions">
-
-
-                <h2>Questions</h2>
-
-                <p>
-                    Gère les questions et les points attribués à chaque réponse.
-                </p>
-
-
-                <div id="liste-questions">
-
-                    <p>
-                        Aucune question chargée.
-                    </p>
-
-                </div>
-
-
-                <button
-                    id="ajouter-question"
-                    type="button"
-                >
-                    + Ajouter une question
-                </button>
-
-
-                <div
-                    id="formulaire-question"
-                    class="cache"
-                >
-
-                    <h2>
-                        Nouvelle question
-                    </h2>
-
-
-                    <label for="nouvelle-question">
-                        Question
-                    </label>
-
-                    <input
-                        type="text"
-                        id="nouvelle-question"
-                        placeholder="Écris ta question..."
-                    >
-
-
-                    <h3>Points</h3>
-
-                    <p>
-                        Définis les points attribués à chaque réponse.
-                    </p>
-
-
-                    <div class="table-responsive">
-
-                        <table class="table-points">
-
-                            <thead>
-
-                                <tr>
-                                    <th>Réponse</th>
-                                    <th>👥 Amis</th>
-                                    <th>🌙 Un soir</th>
-                                    <th>❤️ Couple</th>
-                                </tr>
-
-                            </thead>
-
-
-                            <tbody>
-
-                                <tr>
-                                    <td>Oui</td>
-                                    <td><input type="number" id="oui-amis" value="0"></td>
-                                    <td><input type="number" id="oui-un-soir" value="0"></td>
-                                    <td><input type="number" id="oui-couple" value="0"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Non</td>
-                                    <td><input type="number" id="non-amis" value="0"></td>
-                                    <td><input type="number" id="non-un-soir" value="0"></td>
-                                    <td><input type="number" id="non-couple" value="0"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Peut-être</td>
-                                    <td><input type="number" id="peut-etre-amis" value="0"></td>
-                                    <td><input type="number" id="peut-etre-un-soir" value="0"></td>
-                                    <td><input type="number" id="peut-etre-couple" value="0"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Pas du tout</td>
-                                    <td><input type="number" id="pas-du-tout-amis" value="0"></td>
-                                    <td><input type="number" id="pas-du-tout-un-soir" value="0"></td>
-                                    <td><input type="number" id="pas-du-tout-couple" value="0"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Je ne sais pas</td>
-                                    <td><input type="number" id="je-ne-sais-pas-amis" value="0"></td>
-                                    <td><input type="number" id="je-ne-sais-pas-un-soir" value="0"></td>
-                                    <td><input type="number" id="je-ne-sais-pas-couple" value="0"></td>
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-
-                    <div class="actions-formulaire">
-
-                        <button
-                            id="enregistrer-question"
-                            type="button"
-                        >
-                            Enregistrer
-                        </button>
-
-                        <button
-                            id="annuler-question"
-                            type="button"
-                            class="bouton-secondaire"
-                        >
-                            Annuler
-                        </button>
-
-                    </div>
-
-                </div>
-
-            
-                    </div>
-                </details>
-
-            </div>
-
-
-
-            <!-- COMPTE -->
-            <div id="section-compte" class="section-repliable-wrapper">
-                <details id="panneau-compte" class="panneau-repliable">
-                    <summary>
-                        <span><strong>🔐 Mon compte</strong><small>Modifie le mot de passe de ton compte administrateur.</small></span>
-                        <span class="indicateur-repli" aria-hidden="true">⌄</span>
-                    </summary>
-                    <div class="contenu-panneau-repliable">
-                <form id="formulaire-changement-mot-de-passe">
-                    <label for="nouveau-mot-de-passe">Nouveau mot de passe</label>
-                    <input type="password" id="nouveau-mot-de-passe" minlength="8" autocomplete="new-password" required>
-                    <label for="confirmation-nouveau-mot-de-passe">Confirmer le nouveau mot de passe</label>
-                    <input type="password" id="confirmation-nouveau-mot-de-passe" minlength="8" autocomplete="new-password" required>
-                    <button type="submit">Changer mon mot de passe</button>
-                </form>
-                    </div>
-                </details>
-            </div>
-
-            <!-- RÉSULTATS -->
-
-            <div id="section-resultats">
-
-                <h2>Résultats</h2>
-
-                <p>
-                    Résultats des personnes ayant terminé le questionnaire.
-                </p>
-
-
-                <!-- TABLEAU DE BORD RÉSULTATS -->
-                <div id="statistiques-resultats" aria-label="Statistiques des résultats">
-
-                    <div class="carte-statistique">
-                        <span class="stat-icone">👥</span>
-                        <strong id="stat-total">0</strong>
-                        <span>Participations</span>
-                    </div>
-
-                    <div class="carte-statistique">
-                        <span class="stat-icone">🆕</span>
-                        <strong id="stat-semaine">0</strong>
-                        <span>Cette semaine</span>
-                    </div>
-
-                    <div class="carte-statistique">
-                        <span class="stat-icone">🤝</span>
-                        <strong id="stat-moyenne-amis">—</strong>
-                        <span>Moyenne Amis</span>
-                    </div>
-
-                    <div class="carte-statistique">
-                        <span class="stat-icone">🌙</span>
-                        <strong id="stat-moyenne-un-soir">—</strong>
-                        <span>Moyenne Un soir</span>
-                    </div>
-
-                    <div class="carte-statistique">
-                        <span class="stat-icone">❤️</span>
-                        <strong id="stat-moyenne-couple">—</strong>
-                        <span>Moyenne Couple</span>
-                    </div>
-
-                    <div class="carte-statistique"><span class="stat-icone">📞</span><strong id="stat-a-contacter">0</strong><span>À contacter</span></div>
-                    <div class="carte-statistique"><span class="stat-icone">⭐</span><strong id="stat-favoris">0</strong><span>Favoris</span></div>
-                    <div class="carte-statistique"><span class="stat-icone">✅</span><strong id="stat-contactes">0</strong><span>Contactés</span></div>
-                    <div class="carte-statistique"><span class="stat-icone">⛔</span><strong id="stat-ecartes">0</strong><span>Écartés</span></div>
-
-                </div>
-
-
-                <div id="filtres-suivi" aria-label="Filtres de suivi">
-                    <button type="button" class="actif" data-suivi="tous">Tous</button>
-                    <button type="button" data-suivi="favoris">⭐ Favoris</button>
-                    <button type="button" data-suivi="a_contacter">À contacter</button>
-                    <button type="button" data-suivi="contacte">Contactés</button>
-                    <button type="button" data-suivi="ecarte">Écartés</button>
-                </div>
-
-                <div id="filtres-categorie">
-
-                    <button id="classement-amis" type="button">
-                        👥 Amis
-                    </button>
-
-                    <button id="classement-un-soir" type="button">
-                        🌙 Un soir
-                    </button>
-
-                    <button id="classement-couple" type="button">
-                        ❤️ Couple
-                    </button>
-
-                </div>
-
-
-                <div class="recherche-participants">
-                    <label for="recherche-participant">
-                        Rechercher un participant
-                    </label>
-
-                    <input
-                        type="search"
-                        id="recherche-participant"
-                        placeholder="Prénom, nom ou âge..."
-                        autocomplete="off"
-                    >
-                </div>
-
-
-                <div id="tri-date-resultats">
-                    <label for="tri-date">Ordre d'affichage</label>
-                    <select id="tri-date">
-                        <option value="classement">Classement</option>
-                        <option value="recent">Plus récents</option>
-                        <option value="ancien">Plus anciens</option>
-                    </select>
-                </div>
-
-                <div id="filtres-nombre">
-
-                    <button id="afficher-top-5" type="button">
-                        Top 5
-                    </button>
-
-                    <button id="afficher-top-10" type="button">
-                        Top 10
-                    </button>
-
-                    <button id="afficher-tous" type="button">
-                        Tous
-                    </button>
-
-                </div>
-
-
-                <div class="zone-danger-resultats">
-                    <button id="supprimer-tous-resultats" type="button" class="bouton-danger">
-                        🧹 Supprimer tous mes résultats
-                    </button>
-                    <p>Supprime définitivement tous tes participants, réponses et résultats. Les questions ne sont pas supprimées.</p>
-                </div>
-
-                <div id="comparaison-profils" class="comparaison-profils">
-                    <h3>Comparer deux profils</h3>
-                    <div class="comparaison-controles">
-                        <select id="comparaison-profil-a"><option value="">Profil A</option></select>
-                        <select id="comparaison-profil-b"><option value="">Profil B</option></select>
-                        <button id="bouton-comparer-profils" type="button">Comparer</button>
-                    </div>
-                    <div id="comparaison-resultat" class="comparaison-resultat cache"></div>
-                </div>
-
-                <div id="liste-resultats">
-
-                    <p>
-                        Aucun résultat chargé.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <div
-        id="fond-popup"
-        class="cache"
-    ></div>
-
-
-    <div
-        id="fiche-participant"
-        class="cache"
-    >
-
-        <button
-            id="croix-fermer-fiche"
-            type="button"
-            aria-label="Fermer"
-        >
+</div>
+</div>
+</div>
+</details>
+</div><div class="section-repliable-wrapper" id="section-compte">
+<details class="panneau-repliable" id="panneau-compte">
+<summary>
+<span><strong>🔐 Mon compte</strong><small>Modifie le mot de passe de ton compte administrateur.</small></span>
+<span aria-hidden="true" class="indicateur-repli">⌄</span>
+</summary>
+<div class="contenu-panneau-repliable">
+<form id="formulaire-changement-mot-de-passe">
+<label for="nouveau-mot-de-passe">Nouveau mot de passe</label>
+<input autocomplete="new-password" id="nouveau-mot-de-passe" minlength="8" required="" type="password"/>
+<label for="confirmation-nouveau-mot-de-passe">Confirmer le nouveau mot de passe</label>
+<input autocomplete="new-password" id="confirmation-nouveau-mot-de-passe" minlength="8" required="" type="password"/>
+<button type="submit">Changer mon mot de passe</button>
+</form>
+</div>
+</details>
+</div>
+<!-- ADMINISTRATEURS -->
+
+<!-- QUESTIONS -->
+
+<!-- COMPTE -->
+
+<!-- RÉSULTATS -->
+
+<!-- INTERFACE APPLICATION MOBILE V2.1 -->
+<section aria-label="Profils" class="ecran-mobile-app cache" id="ecran-mobile-profils">
+<div class="entete-ecran-mobile">
+<div>
+<h2>👤 Profils</h2>
+<p>Tous les participants en un coup d'œil.</p>
+</div>
+</div>
+<input autocomplete="off" class="recherche-mobile-app" id="recherche-profils-mobile" placeholder="Rechercher un prénom, nom ou âge..." type="search"/>
+<div class="liste-profils-mobile" id="liste-profils-mobile"></div>
+</section>
+<section aria-label="Favoris" class="ecran-mobile-app cache" id="ecran-mobile-favoris">
+<div class="entete-ecran-mobile">
+<div>
+<h2>⭐ Favoris</h2>
+<p>Les profils que tu as marqués comme favoris.</p>
+</div>
+</div>
+<div class="liste-profils-mobile" id="liste-favoris-mobile"></div>
+</section>
+
+<!-- NAVIGATION MOBILE V2.1 -->
+<nav aria-label="Navigation mobile" class="navigation-mobile-admin" id="navigation-mobile-admin">
+<button class="nav-mobile-bouton actif" data-cible="accueil" type="button"><span class="nav-mobile-icone">⌂</span><span>Accueil</span></button>
+<button class="nav-mobile-bouton" data-cible="profils" type="button"><span class="nav-mobile-icone">👤</span><span>Profils</span><span class="nav-mobile-badge cache" id="badge-nouveaux-profils">0</span></button>
+<button class="nav-mobile-bouton" data-cible="favoris" type="button"><span class="nav-mobile-icone">★</span><span>Favoris</span></button>
+</nav>
+</div>
+</div>
+<div class="cache" id="fond-popup"></div>
+<div class="cache" id="fiche-participant">
+<button aria-label="Fermer" id="croix-fermer-fiche" type="button">
             ✕
         </button>
-
-
-        <h2>
+<h2>
             Détails du participant
         </h2>
-
-
-        <div id="infos-participant">
-        </div>
-
-
-        <div id="suivi-participant">
-
-            <h3>Suivi privé</h3>
-
-            <label class="ligne-favori" for="participant-favori">
-                <input type="checkbox" id="participant-favori">
-                <span>⭐ Ajouter aux favoris</span>
-            </label>
-
-            <label for="participant-statut">
+<div id="infos-participant">
+</div>
+<div id="suivi-participant">
+<h3>Suivi privé</h3>
+<label class="ligne-favori" for="participant-favori">
+<input id="participant-favori" type="checkbox"/>
+<span>⭐ Ajouter aux favoris</span>
+</label>
+<label for="participant-statut">
                 Statut
             </label>
-
-            <select id="participant-statut">
-                <option value="a_contacter">À contacter</option>
-                <option value="contacte">Contacté</option>
-                <option value="ecarte">Écarté</option>
-            </select>
-
-            <label for="participant-note-privee">
+<select id="participant-statut">
+<option value="a_contacter">À contacter</option>
+<option value="contacte">Contacté</option>
+<option value="ecarte">Écarté</option>
+</select>
+<label for="participant-note-privee">
                 Note privée
             </label>
-
-            <textarea
-                id="participant-note-privee"
-                maxlength="2000"
-                rows="5"
-                placeholder="Ajoute ici une note visible uniquement dans ton administration..."
-            ></textarea>
-
-            <div class="ligne-enregistrement-suivi">
-                <button id="enregistrer-suivi-participant" type="button">
+<textarea id="participant-note-privee" maxlength="2000" placeholder="Ajoute ici une note visible uniquement dans ton administration..." rows="5"></textarea>
+<div class="ligne-enregistrement-suivi">
+<button id="enregistrer-suivi-participant" type="button">
                     💾 Enregistrer le suivi
                 </button>
-                <span id="message-suivi-participant" class="message-suivi" aria-live="polite"></span>
-            </div>
-
-        </div>
-
-
-        <h3>Résultats</h3>
-
-        <div id="scores-participant">
-        </div>
-
-        <div id="resume-participant" class="resume-participant">
-        </div>
-
-        <div id="analyse-participant" class="analyse-participant">
-            <h3>Analyse détaillée</h3>
-            <div id="orientation-participant"></div>
-            <div class="analyse-grille">
-                <div><h4>Points forts</h4><div id="points-forts-participant"></div></div>
-                <div><h4>Points de vigilance</h4><div id="points-vigilance-participant"></div></div>
-            </div>
-            <h4>Réponses les plus influentes</h4>
-            <div id="reponses-influentes-participant"></div>
-        </div>
-
-
-        <h3>Réponses</h3>
-
-        <div id="reponses-participant">
-        </div>
-
-
-        <button id="supprimer-participant" type="button" class="bouton-danger">
+<span aria-live="polite" class="message-suivi" id="message-suivi-participant"></span>
+</div>
+</div>
+<h3>Résultats</h3>
+<div id="scores-participant">
+</div>
+<div class="resume-participant" id="resume-participant">
+</div>
+<div class="analyse-participant" id="analyse-participant">
+<h3>Analyse détaillée</h3>
+<div id="orientation-participant"></div>
+<div class="analyse-grille">
+<div><h4>Points forts</h4><div id="points-forts-participant"></div></div>
+<div><h4>Points de vigilance</h4><div id="points-vigilance-participant"></div></div>
+</div>
+<h4>Réponses les plus influentes</h4>
+<div id="reponses-influentes-participant"></div>
+</div>
+<h3>Réponses</h3>
+<div id="reponses-participant">
+</div>
+<button class="bouton-danger" id="supprimer-participant" type="button">
             🗑️ Supprimer ce participant
         </button>
-
-        <button
-            id="fermer-fiche-participant"
-            type="button"
-        >
+<button id="fermer-fiche-participant" type="button">
             Fermer
         </button>
-
-    </div>
-
-
-
-    <!-- Bibliothèque QR Code -->
-
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-
-
-    <!-- Supabase -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-    <script src="admin.js"></script>
-
+</div>
+<!-- Bibliothèque QR Code -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="admin.js"></script>
 </body>
-
 </html>

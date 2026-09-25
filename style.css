@@ -1490,3 +1490,314 @@ button:disabled {
 .panneau-repliable>summary{padding:18px}.panneau-repliable>summary strong{font-size:20px}.contenu-panneau-repliable{padding:0 15px 18px}
 .panneau-repliable-interne>summary{padding:15px}.panneau-repliable-interne>summary strong{font-size:17px}.panneau-repliable-interne .contenu-panneau-repliable{padding:15px}
 }
+
+
+/* ========================================
+   V2.1 — ERGONOMIE MOBILE
+   Navigation fixe sans masquer les sections
+   ======================================== */
+
+.navigation-mobile-admin {
+    display: none;
+}
+
+@media (max-width: 750px) {
+    body {
+        padding-bottom: 86px;
+    }
+
+    .container-admin {
+        padding-bottom: 18px;
+    }
+
+    .navigation-mobile-admin {
+        position: fixed;
+        z-index: 900;
+        left: 50%;
+        bottom: max(8px, env(safe-area-inset-bottom));
+        transform: translateX(-50%);
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        width: min(calc(100% - 18px), 620px);
+        min-height: 64px;
+        padding: 6px;
+        background: rgba(255,255,255,.96);
+        border: 1px solid rgba(0,0,0,.10);
+        border-radius: 18px;
+        box-shadow: 0 8px 30px rgba(0,0,0,.18);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-mobile-bouton {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        min-width: 0;
+        min-height: 52px;
+        margin: 0;
+        padding: 5px 2px;
+        border: 0;
+        border-radius: 13px;
+        background: transparent;
+        color: #666;
+        font-size: 10px;
+        line-height: 1.1;
+        box-shadow: none;
+    }
+
+    .nav-mobile-bouton:hover {
+        transform: none;
+    }
+
+    .nav-mobile-bouton.actif {
+        background: rgba(123,104,200,.11);
+        color: #4d3f8d;
+    }
+
+    .nav-mobile-icone {
+        display: block;
+        font-size: 20px;
+        line-height: 22px;
+        font-weight: 700;
+    }
+
+    .nav-mobile-badge {
+        position: absolute;
+        top: 1px;
+        right: 7px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        border-radius: 9px;
+        background: #333;
+        color: white;
+        font-size: 10px;
+        line-height: 18px;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    #section-mon-questionnaire,
+    #section-administrateurs,
+    #section-questions,
+    #section-compte,
+    #section-resultats {
+        scroll-margin-top: 16px;
+    }
+
+    .entete-admin {
+        gap: 10px;
+    }
+
+    .entete-admin h1 {
+        font-size: 24px;
+    }
+
+    #deconnexion {
+        width: auto;
+        min-width: 0;
+        padding: 9px 11px;
+        font-size: 12px;
+    }
+
+    #section-resultats {
+        padding-bottom: 12px;
+    }
+}
+
+@media (min-width: 751px) {
+    .navigation-mobile-admin {
+        display: none !important;
+    }
+}
+
+
+/* ========================================
+   V2.1 — ÉCRANS APPLICATION MOBILE
+   ======================================== */
+.ecran-mobile-app { display: none; }
+
+@media (max-width: 750px) {
+    .ecran-mobile-app:not(.cache) {
+        display: block;
+        margin: 18px 0 90px;
+        padding: 16px;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 8px 28px rgba(0,0,0,.08);
+        scroll-margin-top: 12px;
+    }
+
+    .entete-ecran-mobile h2 { margin: 0 0 4px; }
+    .entete-ecran-mobile p { margin: 0 0 14px; opacity: .72; }
+
+    .recherche-mobile-app {
+        width: 100%;
+        margin: 0 0 14px;
+    }
+
+    .liste-profils-mobile {
+        display: grid;
+        gap: 10px;
+    }
+
+    .carte-profil-mobile {
+        width: 100%;
+        margin: 0;
+        padding: 14px;
+        text-align: left;
+        border: 1px solid rgba(0,0,0,.08);
+        border-radius: 15px;
+        background: #fff;
+        color: inherit;
+        box-shadow: 0 3px 14px rgba(0,0,0,.06);
+    }
+
+    .carte-profil-mobile:hover { transform: none; }
+
+    .carte-profil-mobile-entete {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 16px;
+    }
+
+    .etoile-profil-mobile {
+        font-size: 20px;
+        line-height: 1;
+    }
+
+    .carte-profil-mobile-meta {
+        margin-top: 4px;
+        font-size: 12px;
+        opacity: .68;
+    }
+
+    .mini-scores-mobile {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+    .mini-scores-mobile span {
+        padding: 7px 4px;
+        border-radius: 10px;
+        background: rgba(0,0,0,.045);
+        text-align: center;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .etat-vide-mobile {
+        padding: 22px 12px;
+        text-align: center;
+        opacity: .65;
+    }
+
+    .grille-reglages-mobile {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .carte-reglage-mobile {
+        min-height: 105px;
+        margin: 0;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 6px;
+        text-align: left;
+        border-radius: 15px;
+    }
+
+    .carte-reglage-mobile strong { font-size: 14px; }
+    .carte-reglage-mobile span { font-size: 11px; opacity: .78; font-weight: 400; }
+
+    #navigation-mobile-admin {
+        z-index: 1100;
+    }
+
+    #fiche-participant {
+        z-index: 1300;
+    }
+
+    #fond-popup {
+        z-index: 1200;
+    }
+}
+
+
+/* ========================================
+   V2.1 — TABLEAU DE BORD MOBILE RÉORGANISÉ
+   ======================================== */
+
+.raccourcis-reglages {
+    margin: 22px 0;
+}
+
+.grille-raccourcis-reglages {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.raccourci-reglage {
+    min-height: 92px;
+    margin: 0;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-align: center;
+    border-radius: 14px;
+}
+
+.raccourci-icone {
+    font-size: 24px;
+}
+
+.profil-non-examine {
+    border-width: 2px !important;
+}
+
+.marqueurs-profil-mobile {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+@media (max-width: 750px) {
+    .navigation-mobile-admin {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    #section-mon-questionnaire {
+        margin-top: 8px;
+    }
+
+    #section-mon-questionnaire #zone-qr {
+        margin-top: 14px;
+    }
+
+    .grille-raccourcis-reglages {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .raccourci-reglage {
+        min-height: 86px;
+    }
+
+    #section-resultats {
+        margin-top: 14px;
+    }
+}
