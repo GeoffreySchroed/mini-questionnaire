@@ -514,6 +514,42 @@ urlQuestionnaire.searchParams.set(
 }
 
 
+
+function telechargerQrCode() {
+    const canvas = zoneQrCode.querySelector("canvas");
+    const image = zoneQrCode.querySelector("img");
+
+    let source = "";
+
+    if (canvas) {
+        source = canvas.toDataURL("image/png");
+    } else if (image && image.src) {
+        source = image.src;
+    }
+
+    if (!source) return;
+
+    const lienTelechargement = document.createElement("a");
+    lienTelechargement.href = source;
+    lienTelechargement.download = "JustBetweenUs-QR.png";
+    document.body.appendChild(lienTelechargement);
+    lienTelechargement.click();
+    lienTelechargement.remove();
+}
+
+zoneQrCode.addEventListener("click", telechargerQrCode);
+zoneQrCode.setAttribute("title", "Enregistrer le QR code");
+zoneQrCode.setAttribute("role", "button");
+zoneQrCode.setAttribute("tabindex", "0");
+
+zoneQrCode.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        telechargerQrCode();
+    }
+});
+
+
 boutonCopierLien.addEventListener(
     "click",
     async function () {

@@ -1838,3 +1838,27 @@ button:disabled {
         display: none !important;
     }
 }
+
+
+/* V2.1 — QR enregistrable par simple appui */
+#qr-code {
+    cursor: pointer;
+}
+
+.aide-qr-mobile {
+    display: none;
+}
+
+@media (max-width: 750px) {
+    .aide-qr-mobile {
+        display: block;
+        margin-top: 6px !important;
+        font-size: 11px;
+        opacity: .62;
+    }
+
+    #qr-code {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+}

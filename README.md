@@ -33,3 +33,5 @@ Interface GSM épurée : Recherche participant, Ordre d'affichage et boutons Top
 Ajustement mobile : la liste complète des cartes participants sous Comparer deux profils est masquée. Les profils se consultent désormais via l'onglet Profils. Le résultat d'une comparaison reste affiché dans la zone de comparaison.
 
 Ajustement mobile : les boutons de classement Amis / Un soir / Couple sont masqués sur GSM. Ils restent disponibles sur ordinateur.
+
+QR mobile : un simple appui/clic sur le QR télécharge l'image JustBetweenUs-QR.png. Aucun bouton supplémentaire. Compatible avec le rendu canvas ou image de la bibliothèque QR.
