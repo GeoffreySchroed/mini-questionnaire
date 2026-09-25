@@ -515,26 +515,67 @@ urlQuestionnaire.searchParams.set(
 
 
 
-function telechargerQrCode() {
+async function telechargerQrCode() {
     const canvas = zoneQrCode.querySelector("canvas");
     const image = zoneQrCode.querySelector("img");
 
-    let source = "";
+    try {
+        let blob = null;
 
-    if (canvas) {
-        source = canvas.toDataURL("image/png");
-    } else if (image && image.src) {
-        source = image.src;
+        if (canvas) {
+            blob = await new Promise(function (resolve) {
+                canvas.toBlob(resolve, "image/png");
+            });
+        } else if (image && image.src) {
+            const reponse = await fetch(image.src);
+            blob = await reponse.blob();
+        }
+
+        if (!blob) return;
+
+        const fichier = new File(
+            [blob],
+            "JustBetweenUs-QR.png",
+            { type: "image/png" }
+        );
+
+        /*
+            Sur Android, le partage système est plus fiable qu'un
+            téléchargement forcé depuis une page web. Il permet
+            notamment "Enregistrer dans Fichiers", Galerie/Photos
+            selon les applications installées.
+        */
+        if (
+            navigator.share &&
+            navigator.canShare &&
+            navigator.canShare({ files: [fichier] })
+        ) {
+            await navigator.share({
+                files: [fichier],
+                title: "QR code JustBetweenUs"
+            });
+            return;
+        }
+
+        // Secours pour PC ou navigateur sans partage de fichiers.
+        const url = URL.createObjectURL(blob);
+        const lienTelechargement = document.createElement("a");
+        lienTelechargement.href = url;
+        lienTelechargement.download = "JustBetweenUs-QR.png";
+        document.body.appendChild(lienTelechargement);
+        lienTelechargement.click();
+        lienTelechargement.remove();
+
+        setTimeout(function () {
+            URL.revokeObjectURL(url);
+        }, 1000);
+
+    } catch (error) {
+        // Annuler la feuille de partage Android n'est pas une erreur à afficher.
+        if (error && error.name !== "AbortError") {
+            console.error("Impossible d'enregistrer le QR code :", error);
+        }
     }
-
-    if (!source) return;
-
-    const lienTelechargement = document.createElement("a");
-    lienTelechargement.href = source;
-    lienTelechargement.download = "JustBetweenUs-QR.png";
-    document.body.appendChild(lienTelechargement);
-    lienTelechargement.click();
-    lienTelechargement.remove();
 }
 
 zoneQrCode.addEventListener("click", telechargerQrCode);

@@ -35,3 +35,5 @@ Ajustement mobile : la liste complète des cartes participants sous Comparer deu
 Ajustement mobile : les boutons de classement Amis / Un soir / Couple sont masqués sur GSM. Ils restent disponibles sur ordinateur.
 
 QR mobile : un simple appui/clic sur le QR télécharge l'image JustBetweenUs-QR.png. Aucun bouton supplémentaire. Compatible avec le rendu canvas ou image de la bibliothèque QR.
+
+Correction Android QR : l'appui utilise maintenant la feuille de partage native Android avec le PNG du QR. Cela permet de l'enregistrer via Fichiers/Photos selon le téléphone. Un téléchargement classique reste prévu en secours sur les navigateurs sans partage de fichiers.
