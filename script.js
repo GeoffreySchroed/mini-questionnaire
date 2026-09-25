@@ -44,6 +44,52 @@ let envoiEnCours = false;
 
 let consentementDonne = false;
 
+const DELAI_ANTI_DOUBLON_LOCAL = 10 * 60 * 1000;
+
+function cleSoumissionLocale() {
+    return "justbetweenus_soumission_" + QUESTIONNAIRE_TOKEN;
+}
+
+function soumissionRecente() {
+    if (!QUESTIONNAIRE_TOKEN) return false;
+
+    try {
+        const valeur = localStorage.getItem(cleSoumissionLocale());
+        if (!valeur) return false;
+
+        const dateSoumission = Number(valeur);
+        if (!Number.isFinite(dateSoumission)) {
+            localStorage.removeItem(cleSoumissionLocale());
+            return false;
+        }
+
+        const recente =
+            Date.now() - dateSoumission < DELAI_ANTI_DOUBLON_LOCAL;
+
+        if (!recente) {
+            localStorage.removeItem(cleSoumissionLocale());
+        }
+
+        return recente;
+    } catch (error) {
+        console.warn("Stockage local indisponible :", error);
+        return false;
+    }
+}
+
+function memoriserSoumission() {
+    if (!QUESTIONNAIRE_TOKEN) return;
+
+    try {
+        localStorage.setItem(
+            cleSoumissionLocale(),
+            String(Date.now())
+        );
+    } catch (error) {
+        console.warn("Impossible de mémoriser la soumission :", error);
+    }
+}
+
 
 // ========================================
 // ÉLÉMENTS
@@ -103,6 +149,12 @@ const texteQuestion =
     document.getElementById(
         "texte-question"
     );
+
+const barreProgressionQuestionnaire =
+    document.getElementById("barre-progression-questionnaire");
+
+const pourcentageProgression =
+    document.getElementById("pourcentage-progression");
 
 const boutonsReponse =
     document.querySelectorAll(
@@ -266,17 +318,28 @@ async function initialiserQuestionnaire() {
         return;
     }
 
-    const configurationOk =
-        await chargerConfiguration();
-
-    const questionsOk =
-        await chargerQuestions();
+    const [configurationOk, questionsOk] =
+        await Promise.all([
+            chargerConfiguration(),
+            chargerQuestions()
+        ]);
 
     if (!configurationOk || !questionsOk) {
         afficherLienInvalide();
         return;
     }
 
+
+    if (soumissionRecente()) {
+        accueil.classList.add("cache");
+        identification.classList.add("cache");
+        questionnaire.classList.add("cache");
+        questionnaireFinTitre.textContent = "Merci 😊";
+        questionnaireFinMessage.textContent =
+            "Ce questionnaire a déjà été envoyé récemment depuis cet appareil.";
+        finQuestionnaire.classList.remove("cache");
+        return;
+    }
 
     accueil.classList.remove(
         "cache"
@@ -467,6 +530,17 @@ function afficherQuestion() {
         questions.length;
 
 
+    const progression =
+        Math.round(
+            ((questionActuelle + 1) / questions.length) * 100
+        );
+
+    barreProgressionQuestionnaire.style.width =
+        progression + "%";
+
+    pourcentageProgression.textContent =
+        progression + " %";
+
     texteQuestion.textContent =
         question.text;
 
@@ -504,6 +578,8 @@ boutonsReponse.forEach(
                 }
 
 
+                bouton.disabled = true;
+
                 reponsesUtilisateur.push({
 
                     question_id:
@@ -517,8 +593,13 @@ boutonsReponse.forEach(
 
                 questionActuelle++;
 
-
                 afficherQuestion();
+
+                // Le changement de question est synchrone : on peut
+                // réactiver immédiatement les boutons pour la suivante.
+                boutonsReponse.forEach(function (element) {
+                    element.disabled = false;
+                });
 
             }
         );
@@ -538,6 +619,7 @@ async function terminerQuestionnaire() {
         return;
 
     }
+
 
     if (!consentementDonne) {
         questionnaire.classList.add("cache");
@@ -644,6 +726,8 @@ async function terminerQuestionnaire() {
 
     }
 
+
+    memoriserSoumission();
 
     questionnaire.classList.add(
         "cache"
