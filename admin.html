@@ -647,6 +647,46 @@
         </div>
 
 
+        <div id="suivi-participant">
+
+            <h3>Suivi privé</h3>
+
+            <label class="ligne-favori" for="participant-favori">
+                <input type="checkbox" id="participant-favori">
+                <span>⭐ Ajouter aux favoris</span>
+            </label>
+
+            <label for="participant-statut">
+                Statut
+            </label>
+
+            <select id="participant-statut">
+                <option value="a_contacter">À contacter</option>
+                <option value="contacte">Contacté</option>
+                <option value="ecarte">Écarté</option>
+            </select>
+
+            <label for="participant-note-privee">
+                Note privée
+            </label>
+
+            <textarea
+                id="participant-note-privee"
+                maxlength="2000"
+                rows="5"
+                placeholder="Ajoute ici une note visible uniquement dans ton administration..."
+            ></textarea>
+
+            <div class="ligne-enregistrement-suivi">
+                <button id="enregistrer-suivi-participant" type="button">
+                    💾 Enregistrer le suivi
+                </button>
+                <span id="message-suivi-participant" class="message-suivi" aria-live="polite"></span>
+            </div>
+
+        </div>
+
+
         <h3>Résultats</h3>
 
         <div id="scores-participant">

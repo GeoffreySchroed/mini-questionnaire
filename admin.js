@@ -208,6 +208,11 @@ const reponsesParticipant = document.getElementById("reponses-participant");
 const boutonFermerFiche = document.getElementById("fermer-fiche-participant");
 const croixFermerFiche = document.getElementById("croix-fermer-fiche");
 const boutonSupprimerParticipant = document.getElementById("supprimer-participant");
+const champParticipantFavori = document.getElementById("participant-favori");
+const champParticipantStatut = document.getElementById("participant-statut");
+const champParticipantNotePrivee = document.getElementById("participant-note-privee");
+const boutonEnregistrerSuiviParticipant = document.getElementById("enregistrer-suivi-participant");
+const messageSuiviParticipant = document.getElementById("message-suivi-participant");
 
 
 // ========================================
@@ -1700,7 +1705,9 @@ async function chargerResultats() {
                 prenom,
                 nom,
                 age,
-                date_creation
+                date_creation,
+                favori,
+                statut
             )
         `)
         .order(
@@ -1889,6 +1896,35 @@ async function chargerResultats() {
 
             bloc.appendChild(titre);
 
+            const suiviResume = document.createElement("div");
+            suiviResume.classList.add("suivi-resume-resultat");
+
+            if (participant.favori) {
+                const badgeFavori = document.createElement("span");
+                badgeFavori.classList.add("badge-suivi", "badge-favori");
+                badgeFavori.textContent = "⭐ Favori";
+                suiviResume.appendChild(badgeFavori);
+            }
+
+            const badgeStatut = document.createElement("span");
+            badgeStatut.classList.add(
+                "badge-suivi",
+                "statut-" + (participant.statut || "a_contacter")
+            );
+
+            const libellesStatut = {
+                a_contacter: "À contacter",
+                contacte: "Contacté",
+                ecarte: "Écarté"
+            };
+
+            badgeStatut.textContent =
+                libellesStatut[participant.statut] ||
+                libellesStatut.a_contacter;
+
+            suiviResume.appendChild(badgeStatut);
+            bloc.appendChild(suiviResume);
+
             bloc.appendChild(
                 creerParagraphe(
                     participant.age +
@@ -1967,7 +2003,7 @@ listeResultats.addEventListener(
         } = await supabaseClient
             .from("participants")
             .select(
-                "id, prenom, nom, age, gsm, reseau, date_creation"
+                "id, prenom, nom, age, gsm, reseau, date_creation, favori, statut, note_privee"
             )
             .eq(
                 "id",
@@ -2063,6 +2099,12 @@ listeResultats.addEventListener(
                 )
             )
         );
+
+        champParticipantFavori.checked = Boolean(participant.favori);
+        champParticipantStatut.value = participant.statut || "a_contacter";
+        champParticipantNotePrivee.value = participant.note_privee || "";
+        messageSuiviParticipant.textContent = "";
+        messageSuiviParticipant.classList.remove("erreur", "succes");
 
 
         scoresParticipant.replaceChildren();
@@ -2243,6 +2285,54 @@ listeResultats.addEventListener(
 
         fondPopup.classList.remove("cache");
         ficheParticipant.classList.remove("cache");
+    }
+);
+
+
+// ========================================
+// SUIVI PRIVÉ DU PARTICIPANT
+// ========================================
+
+boutonEnregistrerSuiviParticipant.addEventListener(
+    "click",
+    async function () {
+
+        if (!participantOuvertId) {
+            return;
+        }
+
+        const ancienTexte = boutonEnregistrerSuiviParticipant.textContent;
+
+        boutonEnregistrerSuiviParticipant.disabled = true;
+        boutonEnregistrerSuiviParticipant.textContent = "Enregistrement...";
+        messageSuiviParticipant.textContent = "";
+        messageSuiviParticipant.classList.remove("erreur", "succes");
+
+        const { error } = await supabaseClient.rpc(
+            "modifier_suivi_participant",
+            {
+                p_participant_id: participantOuvertId,
+                p_favori: champParticipantFavori.checked,
+                p_statut: champParticipantStatut.value,
+                p_note_privee: champParticipantNotePrivee.value.trim()
+            }
+        );
+
+        boutonEnregistrerSuiviParticipant.disabled = false;
+        boutonEnregistrerSuiviParticipant.textContent = ancienTexte;
+
+        if (error) {
+            console.error("Erreur suivi participant :", error.message);
+            messageSuiviParticipant.textContent = "Erreur lors de l'enregistrement.";
+            messageSuiviParticipant.classList.add("erreur");
+            return;
+        }
+
+        messageSuiviParticipant.textContent = "✓ Enregistré";
+        messageSuiviParticipant.classList.add("succes");
+
+        // Actualise les badges de la liste sans fermer la fiche.
+        await chargerResultats();
     }
 );
 
