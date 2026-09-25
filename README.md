@@ -25,3 +25,11 @@ Badge Profils :
 Exécuter V2.1_SQL_NOUVEAUX_PROFILS.sql dans Supabase SQL Editor.
 
 Aucun autre changement de base de données.
+
+Ajustement mobile : la recherche participant et le tri d'affichage de la section Résultats sont masqués sur GSM, car l'écran Profils possède déjà sa propre recherche. Ils restent disponibles sur PC.
+
+Interface GSM épurée : Recherche participant, Ordre d'affichage et boutons Top 5 / Top 10 / Tous sont masqués dans Résultats. Ils restent disponibles sur ordinateur.
+
+Ajustement mobile : la liste complète des cartes participants sous Comparer deux profils est masquée. Les profils se consultent désormais via l'onglet Profils. Le résultat d'une comparaison reste affiché dans la zone de comparaison.
+
+Ajustement mobile : les boutons de classement Amis / Un soir / Couple sont masqués sur GSM. Ils restent disponibles sur ordinateur.

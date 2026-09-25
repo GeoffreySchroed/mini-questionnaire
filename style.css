@@ -1801,3 +1801,40 @@ button:disabled {
         margin-top: 14px;
     }
 }
+
+
+/* V2.1 mobile — la recherche dédiée Profils remplace les anciens contrôles du classement */
+@media (max-width: 750px) {
+    #section-resultats .recherche-participants,
+    #section-resultats #tri-date-resultats {
+        display: none !important;
+    }
+}
+
+
+/* V2.1 mobile — contrôles de classement inutiles sur l'accueil GSM.
+   La recherche se fait dans l'onglet Profils. */
+@media (max-width: 750px) {
+    #section-resultats .recherche-participants,
+    #section-resultats #tri-date-resultats,
+    #section-resultats #filtres-nombre {
+        display: none !important;
+    }
+}
+
+
+/* V2.1 mobile — les fiches sont consultées via l'onglet Profils.
+   Sur l'accueil, seule la zone de comparaison reste visible. */
+@media (max-width: 750px) {
+    #section-resultats #liste-resultats {
+        display: none !important;
+    }
+}
+
+
+/* V2.1 mobile — le choix de catégorie servait au classement désormais masqué. */
+@media (max-width: 750px) {
+    #section-resultats #filtres-categorie {
+        display: none !important;
+    }
+}
