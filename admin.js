@@ -189,6 +189,12 @@ const champRechercheParticipant = document.getElementById("recherche-participant
 const triDateResultats = document.getElementById("tri-date");
 const boutonSupprimerTousResultats = document.getElementById("supprimer-tous-resultats");
 
+const statTotal = document.getElementById("stat-total");
+const statSemaine = document.getElementById("stat-semaine");
+const statMoyenneAmis = document.getElementById("stat-moyenne-amis");
+const statMoyenneUnSoir = document.getElementById("stat-moyenne-un-soir");
+const statMoyenneCouple = document.getElementById("stat-moyenne-couple");
+
 
 // ========================================
 // POPUP PARTICIPANT
@@ -1574,6 +1580,86 @@ champRechercheParticipant.addEventListener(
 
 
 // ========================================
+// STATISTIQUES RÉSULTATS
+// ========================================
+
+function mettreAJourStatistiquesResultats(resultats) {
+
+    const liste = Array.isArray(resultats) ? resultats : [];
+
+    statTotal.textContent = liste.length;
+
+    if (liste.length === 0) {
+        statSemaine.textContent = "0";
+        statMoyenneAmis.textContent = "—";
+        statMoyenneUnSoir.textContent = "—";
+        statMoyenneCouple.textContent = "—";
+        return;
+    }
+
+    const maintenant = new Date();
+    const debutSemaine = new Date(maintenant);
+
+    // Semaine civile : lundi à 00:00.
+    const jour = debutSemaine.getDay();
+    const joursDepuisLundi = jour === 0 ? 6 : jour - 1;
+
+    debutSemaine.setDate(
+        debutSemaine.getDate() - joursDepuisLundi
+    );
+    debutSemaine.setHours(0, 0, 0, 0);
+
+    const participationsSemaine =
+        liste.filter(function (resultat) {
+
+            const dateIso =
+                resultat.date_creation ||
+                resultat.participants?.date_creation;
+
+            if (!dateIso) {
+                return false;
+            }
+
+            const date = new Date(dateIso);
+
+            return (
+                !Number.isNaN(date.getTime()) &&
+                date >= debutSemaine &&
+                date <= maintenant
+            );
+        }).length;
+
+    function moyenne(colonne) {
+
+        const valeurs =
+            liste
+                .map(function (resultat) {
+                    return Number(resultat[colonne]);
+                })
+                .filter(function (valeur) {
+                    return Number.isFinite(valeur);
+                });
+
+        if (valeurs.length === 0) {
+            return "—";
+        }
+
+        const total =
+            valeurs.reduce(function (somme, valeur) {
+                return somme + valeur;
+            }, 0);
+
+        return Math.round(total / valeurs.length) + " %";
+    }
+
+    statSemaine.textContent = participationsSemaine;
+    statMoyenneAmis.textContent = moyenne("pourcentage_amis");
+    statMoyenneUnSoir.textContent = moyenne("pourcentage_un_soir");
+    statMoyenneCouple.textContent = moyenne("pourcentage_couple");
+}
+
+
+// ========================================
 // RÉSULTATS
 // ========================================
 
@@ -1634,6 +1720,10 @@ async function chargerResultats() {
 
 
     listeResultats.replaceChildren();
+
+    // Les statistiques utilisent toujours l'ensemble des résultats,
+    // indépendamment du Top 5/10, de la recherche et du tri.
+    mettreAJourStatistiquesResultats(resultats);
 
 
     if (!resultats || resultats.length === 0) {
