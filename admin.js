@@ -3238,3 +3238,57 @@ boutonDeconnexion.addEventListener(
         ).value = "";
     }
 );
+// ========================================
+// V2.2 — VERROUILLAGE AUTOMATIQUE APRÈS INACTIVITÉ
+// ========================================
+
+const DELAI_INACTIVITE_ADMIN = 10 * 60 * 1000; // 10 minutes
+let minuteurInactiviteAdmin = null;
+
+function reinitialiserMinuteurInactiviteAdmin() {
+    if (minuteurInactiviteAdmin) {
+        clearTimeout(minuteurInactiviteAdmin);
+    }
+
+    minuteurInactiviteAdmin = setTimeout(
+        verrouillerAdministrationPourInactivite,
+        DELAI_INACTIVITE_ADMIN
+    );
+}
+
+async function verrouillerAdministrationPourInactivite() {
+    try {
+        const { data, error } = await supabaseClient.auth.getSession();
+
+        if (error || !data?.session) {
+            return;
+        }
+
+        alert(
+            "Session verrouillée après 10 minutes d'inactivité.\n\n" +
+            "Reconnecte-toi pour accéder à l'administration."
+        );
+
+        // Réutilise la déconnexion existante afin de nettoyer aussi l'interface.
+        boutonDeconnexion.click();
+    } catch (error) {
+        console.error("Erreur verrouillage automatique :", error);
+    }
+}
+
+[
+    "pointerdown",
+    "keydown",
+    "touchstart",
+    "scroll"
+].forEach(function (evenement) {
+    window.addEventListener(
+        evenement,
+        reinitialiserMinuteurInactiviteAdmin,
+        { passive: true }
+    );
+});
+
+// Le compteur démarre dès l'ouverture de la page.
+// Au moment de l'expiration, la session est vérifiée avant toute déconnexion.
+reinitialiserMinuteurInactiviteAdmin();
