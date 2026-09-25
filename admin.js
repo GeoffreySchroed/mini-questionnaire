@@ -2382,31 +2382,33 @@ boutonEnregistrerSuiviParticipant.addEventListener(
         messageSuiviParticipant.textContent = "";
         messageSuiviParticipant.classList.remove("erreur", "succes");
 
-        const { error } = await supabaseClient.rpc(
-            "modifier_suivi_participant",
-            {
-                p_participant_id: participantOuvertId,
-                p_favori: champParticipantFavori.checked,
-                p_statut: champParticipantStatut.value,
-                p_note_privee: champParticipantNotePrivee.value.trim()
-            }
-        );
+        try {
+            const { error } = await supabaseClient.rpc(
+                "modifier_suivi_participant",
+                {
+                    p_participant_id: participantOuvertId,
+                    p_favori: champParticipantFavori.checked,
+                    p_statut: champParticipantStatut.value,
+                    p_note_privee: champParticipantNotePrivee.value.trim()
+                }
+            );
 
-        boutonEnregistrerSuiviParticipant.disabled = false;
-        boutonEnregistrerSuiviParticipant.textContent = ancienTexte;
+            if (error) throw error;
 
-        if (error) {
-            console.error("Erreur suivi participant :", error.message);
-            messageSuiviParticipant.textContent = "Erreur lors de l'enregistrement.";
+            messageSuiviParticipant.textContent = "✓ Enregistré";
+            messageSuiviParticipant.classList.add("succes");
+
+            // Actualise les badges de la liste sans fermer la fiche.
+            await chargerResultats();
+        } catch (error) {
+            console.error("Erreur suivi participant :", error);
+            messageSuiviParticipant.textContent =
+                "Erreur réseau ou enregistrement impossible.";
             messageSuiviParticipant.classList.add("erreur");
-            return;
+        } finally {
+            boutonEnregistrerSuiviParticipant.disabled = false;
+            boutonEnregistrerSuiviParticipant.textContent = ancienTexte;
         }
-
-        messageSuiviParticipant.textContent = "✓ Enregistré";
-        messageSuiviParticipant.classList.add("succes");
-
-        // Actualise les badges de la liste sans fermer la fiche.
-        await chargerResultats();
     }
 );
 
@@ -2424,19 +2426,27 @@ boutonSupprimerParticipant.addEventListener("click", async function () {
     if (!participantOuvertId) return;
     if (!confirm("Supprimer définitivement ce participant, ses réponses et son résultat ?")) return;
 
-    const { error } = await supabaseClient.rpc("supprimer_mon_participant", {
-        p_participant_id: participantOuvertId
-    });
+    boutonSupprimerParticipant.disabled = true;
 
-    if (error) {
-        alert("Impossible de supprimer ce participant.\n\n" + error.message);
-        return;
+    try {
+        const { error } = await supabaseClient.rpc("supprimer_mon_participant", {
+            p_participant_id: participantOuvertId
+        });
+
+        if (error) throw error;
+
+        participantOuvertId = null;
+        fermerFicheParticipant();
+        await chargerResultats();
+        alert("Participant supprimé.");
+    } catch (error) {
+        alert(
+            "Impossible de supprimer ce participant.\n\n" +
+            (error.message || "Erreur réseau.")
+        );
+    } finally {
+        boutonSupprimerParticipant.disabled = false;
     }
-
-    participantOuvertId = null;
-    fermerFicheParticipant();
-    await chargerResultats();
-    alert("Participant supprimé.");
 });
 
 boutonSupprimerTousResultats.addEventListener("click", async function () {
@@ -2451,16 +2461,26 @@ boutonSupprimerTousResultats.addEventListener("click", async function () {
 
     if (!confirm("Dernière confirmation : supprimer définitivement tous tes résultats ?")) return;
 
-    const { error } = await supabaseClient.rpc("supprimer_tous_mes_resultats");
-    if (error) {
-        alert("Impossible de supprimer les résultats.\n\n" + error.message);
-        return;
-    }
+    boutonSupprimerTousResultats.disabled = true;
 
-    fermerFicheParticipant();
-    participantOuvertId = null;
-    await chargerResultats();
-    alert("Tous tes résultats ont été supprimés.");
+    try {
+        const { error } =
+            await supabaseClient.rpc("supprimer_tous_mes_resultats");
+
+        if (error) throw error;
+
+        fermerFicheParticipant();
+        participantOuvertId = null;
+        await chargerResultats();
+        alert("Tous tes résultats ont été supprimés.");
+    } catch (error) {
+        alert(
+            "Impossible de supprimer les résultats.\n\n" +
+            (error.message || "Erreur réseau.")
+        );
+    } finally {
+        boutonSupprimerTousResultats.disabled = false;
+    }
 });
 
 // ========================================
@@ -2620,9 +2640,28 @@ boutonMotDePasseOublie.addEventListener("click", async function () {
     const email = document.getElementById("email").value.trim();
     if (!email) { alert("Indique d'abord ton adresse e-mail."); return; }
     const redirectTo = new URL("admin.html", window.location.href).toString();
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
-    if (error) { alert("Impossible d'envoyer l'e-mail de réinitialisation.\n\n" + error.message); return; }
-    alert("Si cette adresse correspond à un compte, un e-mail de réinitialisation vient d'être envoyé.");
+    boutonMotDePasseOublie.disabled = true;
+
+    try {
+        const { error } =
+            await supabaseClient.auth.resetPasswordForEmail(
+                email,
+                { redirectTo }
+            );
+
+        if (error) throw error;
+
+        alert(
+            "Si cette adresse correspond à un compte, un e-mail de réinitialisation vient d'être envoyé."
+        );
+    } catch (error) {
+        alert(
+            "Impossible d'envoyer l'e-mail de réinitialisation.\n\n" +
+            (error.message || "Erreur réseau.")
+        );
+    } finally {
+        boutonMotDePasseOublie.disabled = false;
+    }
 });
 
 formulaireReinitialisation.addEventListener("submit", async function (event) {
@@ -2671,36 +2710,44 @@ formulaireConnexion.addEventListener(
                 .value;
 
 
-        const {
-            error
-        } = await supabaseClient.auth
-            .signInWithPassword({
-                email: email,
-                password: motDePasse
-            });
+        const boutonConnexion =
+            formulaireConnexion.querySelector('button[type="submit"]');
+        const ancienTexteConnexion =
+            boutonConnexion ? boutonConnexion.textContent : "";
 
-
-        if (error) {
-
-            alert(
-                "Adresse e-mail ou mot de passe incorrect."
-            );
-
-            return;
+        if (boutonConnexion) {
+            boutonConnexion.disabled = true;
+            boutonConnexion.textContent = "Connexion...";
         }
 
+        try {
+            const { error } = await supabaseClient.auth
+                .signInWithPassword({
+                    email: email,
+                    password: motDePasse
+                });
 
-        const ok =
-            await chargerTableauDeBord();
+            if (error) {
+                alert("Adresse e-mail ou mot de passe incorrect.");
+                return;
+            }
 
+            const ok = await chargerTableauDeBord();
 
-        if (!ok) {
-
-            await supabaseClient.auth.signOut();
-
+            if (!ok) {
+                await supabaseClient.auth.signOut();
+                alert("Impossible de charger le profil administrateur.");
+            }
+        } catch (error) {
+            console.error("Erreur connexion :", error);
             alert(
-                "Impossible de charger le profil administrateur."
+                "La connexion n'a pas pu être terminée. Vérifie ta connexion Internet et réessaie."
             );
+        } finally {
+            if (boutonConnexion) {
+                boutonConnexion.disabled = false;
+                boutonConnexion.textContent = ancienTexteConnexion;
+            }
         }
     }
 );
