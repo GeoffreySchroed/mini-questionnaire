@@ -1452,3 +1452,41 @@ button:disabled {
     #regenerer-lien-questionnaire { flex: 1; }
     #filtres-suivi button { flex-basis: calc(50% - 8px); }
 }
+
+
+/* V2.0 — Analyse des profils */
+#statistiques-resultats { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.comparaison-profils,.analyse-participant{margin:18px 0;padding:16px;background:#f8f8fb;border:1px solid #e5e5ee;border-radius:14px}
+.comparaison-profils h3,.analyse-participant h3{margin-top:0}
+.comparaison-controles{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center}
+.comparaison-controles select,.comparaison-controles button{margin:0}
+.comparaison-resultat{margin-top:14px}
+.comparaison-grille{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.comparaison-score{display:flex;flex-direction:column;gap:5px;padding:12px;background:white;border:1px solid #e5e5ee;border-radius:10px}
+.comparaison-score span{font-size:18px;font-weight:700}.comparaison-score small{color:#777}
+#orientation-participant{margin:0 0 15px;padding:12px;background:white;border-radius:10px;font-weight:600}
+.analyse-grille{display:grid;grid-template-columns:1fr 1fr;gap:14px}.analyse-participant h4{margin:12px 0 8px}
+.analyse-puce{margin-bottom:7px;padding:9px 10px;border-radius:9px;font-size:13px}
+.analyse-puce.positif{background:#edf8f1;border:1px solid #cfe8d8}.analyse-puce.vigilance{background:#fff5ed;border:1px solid #f1d8c6}.analyse-puce.neutre{background:white;border:1px solid #e5e5ee}
+.reponse-influente{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;padding:10px;background:white;border:1px solid #e5e5ee;border-radius:9px;font-size:13px}.reponse-influente span{color:#666}
+@media(max-width:750px){#statistiques-resultats{grid-template-columns:repeat(2,minmax(0,1fr))}.comparaison-controles,.comparaison-grille,.analyse-grille{grid-template-columns:1fr}.comparaison-controles button{width:100%}}
+
+/* V2.0 - Personnalisation / Administrateurs / Mon compte repliables */
+.section-repliable-wrapper{padding:0!important;overflow:hidden}
+.panneau-repliable{width:100%}
+.panneau-repliable>summary{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:22px 25px;cursor:pointer;list-style:none;user-select:none}
+.panneau-repliable>summary::-webkit-details-marker{display:none}
+.panneau-repliable>summary:hover{background:rgba(123,104,200,.05)}
+.panneau-repliable>summary>span:first-child{display:flex;flex-direction:column;gap:4px}
+.panneau-repliable>summary strong{color:#333;font-size:1.5em}
+.panneau-repliable>summary small{color:#777;font-size:13px;font-weight:normal}
+.panneau-repliable[open]>summary .indicateur-repli{transform:rotate(180deg)}
+.contenu-panneau-repliable{padding:0 25px 25px;border-top:1px solid #e5e5ee}
+.panneau-repliable-interne{margin-top:18px;border:1px solid #e5e5ee;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.55)}
+.panneau-repliable-interne>summary{padding:16px 18px}
+.panneau-repliable-interne>summary strong{font-size:18px}
+.panneau-repliable-interne .contenu-panneau-repliable{padding:18px}
+@media(max-width:600px){
+.panneau-repliable>summary{padding:18px}.panneau-repliable>summary strong{font-size:20px}.contenu-panneau-repliable{padding:0 15px 18px}
+.panneau-repliable-interne>summary{padding:15px}.panneau-repliable-interne>summary strong{font-size:17px}.panneau-repliable-interne .contenu-panneau-repliable{padding:15px}
+}

@@ -1,10 +1,5 @@
-JustBetweenUs V1.9 — Sécurité et robustesse
-
-Base : V1.8 stable.
-- Garde locale anti-double soumission de 10 minutes, en complément de la protection serveur.
-- Mémorisation locale uniquement après une soumission réellement réussie.
-- Protection contre les doubles clics sur les réponses et actions sensibles.
-- Chargement public configuration/questions en parallèle.
-- Meilleure gestion des erreurs réseau pour connexion, suivi et suppressions.
-- Verrouillage temporaire des boutons pendant les opérations sensibles.
-- Aucune modification SQL requise pour cette version.
+JustBetweenUs V2.0 — Analyse des profils
+Base : V1.9 stable.
+Nouveautés : analyse détaillée, points forts/vigilance, réponses influentes, lecture des écarts entre catégories, dashboard de suivi enrichi, fiche participant enrichie et comparaison de deux profils.
+Aucune IA externe, aucune API payante, aucune modification SQL.
+Les analyses sont descriptives et calculées à partir des scores/réponses déjà enregistrés.

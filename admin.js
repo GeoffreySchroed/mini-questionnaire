@@ -222,6 +222,15 @@ const statSemaine = document.getElementById("stat-semaine");
 const statMoyenneAmis = document.getElementById("stat-moyenne-amis");
 const statMoyenneUnSoir = document.getElementById("stat-moyenne-un-soir");
 const statMoyenneCouple = document.getElementById("stat-moyenne-couple");
+const statAContacter = document.getElementById("stat-a-contacter");
+const statFavoris = document.getElementById("stat-favoris");
+const statContactes = document.getElementById("stat-contactes");
+const statEcartes = document.getElementById("stat-ecartes");
+
+const comparaisonProfilA = document.getElementById("comparaison-profil-a");
+const comparaisonProfilB = document.getElementById("comparaison-profil-b");
+const boutonComparerProfils = document.getElementById("bouton-comparer-profils");
+const comparaisonResultat = document.getElementById("comparaison-resultat");
 
 
 // ========================================
@@ -233,6 +242,10 @@ const fondPopup = document.getElementById("fond-popup");
 const infosParticipant = document.getElementById("infos-participant");
 const scoresParticipant = document.getElementById("scores-participant");
 const resumeParticipant = document.getElementById("resume-participant");
+const orientationParticipant = document.getElementById("orientation-participant");
+const pointsFortsParticipant = document.getElementById("points-forts-participant");
+const pointsVigilanceParticipant = document.getElementById("points-vigilance-participant");
+const reponsesInfluentesParticipant = document.getElementById("reponses-influentes-participant");
 const reponsesParticipant = document.getElementById("reponses-participant");
 const boutonFermerFiche = document.getElementById("fermer-fiche-participant");
 const croixFermerFiche = document.getElementById("croix-fermer-fiche");
@@ -257,6 +270,7 @@ let rechercheParticipant = "";
 let triResultats = "classement";
 let filtreSuivi = "tous";
 let participantOuvertId = null;
+let derniersResultatsComplets = [];
 
 
 // ========================================
@@ -1629,6 +1643,10 @@ function mettreAJourStatistiquesResultats(resultats) {
         statMoyenneAmis.textContent = "—";
         statMoyenneUnSoir.textContent = "—";
         statMoyenneCouple.textContent = "—";
+        statAContacter.textContent = "0";
+        statFavoris.textContent = "0";
+        statContactes.textContent = "0";
+        statEcartes.textContent = "0";
         return;
     }
 
@@ -1691,7 +1709,108 @@ function mettreAJourStatistiquesResultats(resultats) {
     statMoyenneAmis.textContent = moyenne("pourcentage_amis");
     statMoyenneUnSoir.textContent = moyenne("pourcentage_un_soir");
     statMoyenneCouple.textContent = moyenne("pourcentage_couple");
+
+    const participants = liste.map(r => r.participants).filter(Boolean);
+    statAContacter.textContent = participants.filter(p => (p.statut || "a_contacter") === "a_contacter").length;
+    statFavoris.textContent = participants.filter(p => p.favori === true).length;
+    statContactes.textContent = participants.filter(p => p.statut === "contacte").length;
+    statEcartes.textContent = participants.filter(p => p.statut === "ecarte").length;
 }
+
+
+// ========================================
+// ANALYSE / COMPARAISON V2.0
+// ========================================
+
+function remplirSelecteursComparaison(resultats) {
+    const ancienA = comparaisonProfilA.value;
+    const ancienB = comparaisonProfilB.value;
+    [comparaisonProfilA, comparaisonProfilB].forEach((selecteur, index) => {
+        selecteur.replaceChildren();
+        const vide = document.createElement("option");
+        vide.value = "";
+        vide.textContent = index === 0 ? "Profil A" : "Profil B";
+        selecteur.appendChild(vide);
+        (resultats || []).forEach(r => {
+            if (!r.participants) return;
+            const o = document.createElement("option");
+            o.value = r.participant_id;
+            o.textContent = r.participants.prenom + " " + r.participants.nom;
+            selecteur.appendChild(o);
+        });
+    });
+    comparaisonProfilA.value = ancienA;
+    comparaisonProfilB.value = ancienB;
+}
+
+function libelleCategorie(cle) {
+    return cle === "couple" ? "❤️ Couple" : cle === "un_soir" ? "🌙 Un soir" : "👥 Amis";
+}
+
+function analyserOrientation(resultat) {
+    const s = [
+        {cle:"couple",v:Number(resultat.pourcentage_couple)||0},
+        {cle:"un_soir",v:Number(resultat.pourcentage_un_soir)||0},
+        {cle:"amis",v:Number(resultat.pourcentage_amis)||0}
+    ].sort((a,b)=>b.v-a.v);
+    const ecart = s[0].v-s[1].v;
+    const amplitude = s[0].v-s[2].v;
+    if (amplitude < 8) return "Les trois catégories sont proches : profil globalement équilibré.";
+    if (ecart < 5) return libelleCategorie(s[0].cle)+" et "+libelleCategorie(s[1].cle)+" sont très proches ("+s[0].v+" % / "+s[1].v+" %).";
+    return "Orientation la plus marquée : "+libelleCategorie(s[0].cle)+" ("+s[0].v+" %), avec "+ecart+" points d'écart sur la deuxième catégorie.";
+}
+
+function puceAnalyse(conteneur, texte, classe) {
+    const d=document.createElement("div");
+    d.className="analyse-puce "+classe;
+    d.textContent=texte;
+    conteneur.appendChild(d);
+}
+
+function construireAnalyseReponses(reponses) {
+    pointsFortsParticipant.replaceChildren();
+    pointsVigilanceParticipant.replaceChildren();
+    reponsesInfluentesParticipant.replaceChildren();
+    if (!reponses || reponses.length===0) {
+        puceAnalyse(pointsVigilanceParticipant,"Pas assez de données pour analyser les réponses.","neutre");
+        return;
+    }
+    const x=reponses.map(r=>{
+        const a=Number(r.points_amis)||0,u=Number(r.points_un_soir)||0,c=Number(r.points_couple)||0;
+        return {...r,moy:(a+u+c)/3,amp:Math.max(a,u,c)-Math.min(a,u,c)};
+    });
+    [...x].sort((a,b)=>b.moy-a.moy).slice(0,3).forEach(r=>puceAnalyse(pointsFortsParticipant,(r.question_text || r.questions?.text || "Question")+" — "+r.reponse,"positif"));
+    [...x].sort((a,b)=>a.moy-b.moy).slice(0,3).forEach(r=>puceAnalyse(pointsVigilanceParticipant,(r.question_text || r.questions?.text || "Question")+" — "+r.reponse,"vigilance"));
+    [...x].sort((a,b)=>b.amp-a.amp).slice(0,5).forEach(r=>{
+        const d=document.createElement("div"); d.className="reponse-influente";
+        const strong=document.createElement("strong"); strong.textContent=r.question_text || r.questions?.text || "Question";
+        const span=document.createElement("span"); span.textContent=r.reponse+" · Amis "+(Number(r.points_amis)||0)+"/10 · Un soir "+(Number(r.points_un_soir)||0)+"/10 · Couple "+(Number(r.points_couple)||0)+"/10";
+        d.append(strong,span); reponsesInfluentesParticipant.appendChild(d);
+    });
+}
+
+boutonComparerProfils.addEventListener("click", function () {
+    const idA=comparaisonProfilA.value,idB=comparaisonProfilB.value;
+    if (!idA || !idB) { alert("Choisis deux profils à comparer."); return; }
+    if (idA===idB) { alert("Choisis deux profils différents."); return; }
+    const a=derniersResultatsComplets.find(r=>r.participant_id===idA);
+    const b=derniersResultatsComplets.find(r=>r.participant_id===idB);
+    if (!a || !b || !a.participants || !b.participants) return;
+    comparaisonResultat.replaceChildren();
+    const titre=document.createElement("h4");
+    titre.textContent=a.participants.prenom+" "+a.participants.nom+" ↔ "+b.participants.prenom+" "+b.participants.nom;
+    comparaisonResultat.appendChild(titre);
+    const grille=document.createElement("div"); grille.className="comparaison-grille";
+    [["❤️ Couple",a.pourcentage_couple,b.pourcentage_couple],["🌙 Un soir",a.pourcentage_un_soir,b.pourcentage_un_soir],["👥 Amis",a.pourcentage_amis,b.pourcentage_amis]].forEach(([nom,va,vb])=>{
+        const d=document.createElement("div"); d.className="comparaison-score";
+        const st=document.createElement("strong"); st.textContent=nom;
+        const sp=document.createElement("span"); sp.textContent=(Number(va)||0)+" % ↔ "+(Number(vb)||0)+" %";
+        const sm=document.createElement("small"); sm.textContent="Écart : "+Math.abs((Number(va)||0)-(Number(vb)||0))+" points";
+        d.append(st,sp,sm); grille.appendChild(d);
+    });
+    comparaisonResultat.appendChild(grille);
+    comparaisonResultat.classList.remove("cache");
+});
 
 
 // ========================================
@@ -1761,6 +1880,8 @@ async function chargerResultats() {
     // Les statistiques utilisent toujours l'ensemble des résultats,
     // indépendamment du Top 5/10, de la recherche et du tri.
     mettreAJourStatistiquesResultats(resultats);
+    derniersResultatsComplets = resultats || [];
+    remplirSelecteursComparaison(derniersResultatsComplets);
 
 
     if (!resultats || resultats.length === 0) {
@@ -2212,6 +2333,7 @@ listeResultats.addEventListener(
                   " à " + deuxieme.valeur + "%.";
 
         resumeParticipant.appendChild(texteResume);
+        orientationParticipant.textContent = analyserOrientation(resultat);
 
 
         const {
@@ -2266,6 +2388,8 @@ listeResultats.addEventListener(
             }
         );
 
+
+        construireAnalyseReponses(reponses);
 
         reponses.forEach(
             function (reponse) {
